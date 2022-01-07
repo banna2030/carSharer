@@ -98,6 +98,26 @@
 		<url-pattern>/new_rating</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>viewMain_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewMainServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>viewMain_servlet</servlet-name>
+		<url-pattern>/view_main</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>viewSearch_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewSearchServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>viewSearch_servlet</servlet-name>
+		<url-pattern>/view_search</url-pattern>
+	</servlet-mapping>
+
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 
 		RequestDispatcher.forward/include should and will still work. Removing this 
 		may open security holes! -->

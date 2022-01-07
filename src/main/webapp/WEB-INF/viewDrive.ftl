@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>View Drive</title>
+    <title>Fahrt anzeigen</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <style>
         table {
@@ -30,19 +30,38 @@
 </head>
 
 <body>
+
 <div class="container py-4">
 
-<div class="card mb-5 rounded shadow-sm">
+    <div class="mb-3 rounded shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <img src="./Images/car.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            <a class="navbar-brand" href="/view_main">CarSharer</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="/view_main">Hauptseite</a>
+                    <a class="nav-item nav-link active" href="/new_drive">Fahrt Erstellen</a>
+                    <a class="nav-item nav-link active" href="/view_drive">Fahrt anzeigen</a>
+                    <a class="nav-item nav-link active" href="/view_search">Fahrt suchen</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+<div class="card mb-3 rounded shadow-sm">
     <div class="card-body">
         <div class="d-flex">
             <img src="./Images/Ahmed.jpg" class="rounded-circle d-block mr-3" alt="Driver" style="width: 100px; height: 100px; margin-right: 16px">
             <div>
                 <h2 class="card-title">Informationen</h2>
-                <p class="text-secondary">Alle Indormationen über die Fahrer</p>
+                <p class="text-secondary">Alle Informationen zur Reise</p>
             </div>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Anbieter</li>
+            <li class="list-group-item">Anbieter:</li>
             <li class="list-group-item">Fahrtdatum und Uhrzeit:</li>
             <li class="list-group-item">Von:</li>
             <li class="list-group-item">Nach:</li>
@@ -54,7 +73,7 @@
     </div>
 </div>
 
-    <div class="card mb-5 rounded shadow-sm">
+    <div class="card mb-3 rounded shadow-sm">
         <div class="card-body">
             <h2 style="text-align: left;">Aktionsleiste</h2>
             <div class="d-flex justify-content-between">
@@ -70,7 +89,7 @@
         </div>
     </div>
 
-    <div class="card mb-5 rounded shadow-sm">
+    <div class="card mb-3 rounded shadow-sm">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>Bewertungen</h2>
