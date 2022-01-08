@@ -22,6 +22,43 @@
   </head>
   <body>
     <div class="container py-4">
+      <!-- Navbar -->
+      <div class="mb-3 rounded shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div>
+            <img
+                    src="./Images/car.png"
+                    width="30"
+                    height="30"
+                    class="d-inline-block align-top"
+                    alt=""
+            />
+            <a class="navbar-brand" href="/view_main">CarSharer</a>
+          </div>
+
+          <!-- Hamburger Menu -->
+          <button
+                  class="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarNavAltMarkup"
+                  aria-controls="navbarNavAltMarkup"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link active" href="/new_drive">Fahrt Erstellen</a>
+              <a class="nav-item nav-link active" href="/view_drive">Fahrt anzeigen</a>
+              <a class="nav-item nav-link active" href="/view_search">Fahrt suchen</a>
+              <a class="nav-item nav-link active" href="/bonus">Bester Fahrer</a>
+              <a class="nav-item nav-link active" href="/new_rating">Fahrt bewerten</a>
+            </div>
+          </div>
+        </nav>
+      </div>
       <div class="card rounded shadow-sm">
         <div class="card-body">
           <h2 class="text mb-3">Fahrt Bewertung</h2>

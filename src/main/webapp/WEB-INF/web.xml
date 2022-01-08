@@ -118,6 +118,16 @@
 		<url-pattern>/view_search</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>bestDriver_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.BestDriverServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>bestDriver_servlet</servlet-name>
+		<url-pattern>/bonus</url-pattern>
+	</servlet-mapping>
+
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 
 		RequestDispatcher.forward/include should and will still work. Removing this 
 		may open security holes! -->
