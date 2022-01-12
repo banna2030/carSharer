@@ -76,14 +76,14 @@
           <!-- Drives Table -->
           <div class="card mb-3 rounded shadow-sm">
             <div class="card-body">
-              <table class="table">
-                <tr>
-                  <th>Icon</th>
-                  <th>Fahrt-ID</th>
-                  <th>Von</th>
-                  <th>Nach</th>
-                </tr>
-              </table>
+                <table class="table">
+                  <tr>
+                    <th>Icon</th>
+                    <th>Fahrt-ID:</th>
+                    <th>Von:</th>
+                    <th>Nach:</th>
+                  </tr>
+                </table>
             </div>
           </div>
         </div>

@@ -66,77 +66,60 @@
     </div>
 
     <div class="card mb-3 rounded shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="card-body d-flex">
             <div>
                 <h2 style="text-align: left">Meine reservierten Fahrten</h2>
             </div>
-            <div id="carouselExampleIndicators" class="carousel slide d-flex justify-content-between align-items-center" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner d-flex justify-content-between align-items-center">
-                    <div class="carousel-item active d-flex justify-content-between align-items-center">
-                        <div class="card" style="width: 18rem;">
-                            <img class="rounded-circle d-block mr-3" alt="Driver" style="width: 100px; height: 100px; margin-right: 16px" src="./Images/car.png" alt="Card image cap">
-                            <div class="card-body">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Von:</li>
-                                    <li class="list-group-item">Nach:</li>
-                                    <li class="list-group-item">Status:</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Icon</th>
+                    <th scope="col">Von</th>
+                    <th scope="col">Nach</th>
+                    <th scope="col">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <#list reservedDrive as rd>
+                    <tr>
+                        <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src="./Images/car.png" alt="Card image cap"></td>
+                        <td>${rd.getStartort()}</td>
+                        <td>${rd.getZielort()}</td>
+                        <td>${rd.getStatus()}</td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <div class="card mb-3 rounded shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="card-body d-flex">
             <div>
                 <h2 style="text-align: left">Offene Fahrten</h2>
             </div>
-            <div id="carouselExampleIndicators" class="carousel slide d-flex justify-content-between align-items-center" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner d-flex justify-content-between align-items-center">
-                    <div class="carousel-item active d-flex justify-content-between align-items-center">
-                        <div class="card" style="width: 18rem;">
-                            <img class="rounded-circle d-block mr-3" alt="Driver" style="width: 100px; height: 100px; margin-right: 16px" src="./Images/car.png" alt="Card image cap">
-                            <div class="card-body">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Von:</li>
-                                    <li class="list-group-item">Nach:</li>
-                                    <li class="list-group-item">Freie Plätze:</li>
-                                    <li class="list-group-item">Fahrtkosten:</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Icon</th>
+                    <th scope="col">Von</th>
+                    <th scope="col">Nach</th>
+                    <th scope="col">Freie Plätze</th>
+                    <th scope="col">Fahrtkosten</th>
+                </tr>
+                </thead>
+                <tbody>
+                <#list openDrive as od>
+                    <tr>
+                        <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src="./Images/car.png" alt="Card image cap"></td>
+                        <td>${od.getStartort()}</td>
+                        <td>${od.getZielort()}</td>
+                        <td>${od.getFreiplätze()}</td>
+                        <td>${od.getFahrtkosten()}</td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
         </div>
         <button type="button" onclick="location.href='new_drive';" class="btn btn-primary d-block mb-2">Fahrt</button>
     </div>
