@@ -31,7 +31,7 @@ public final class DriveStore implements Closeable {
         ArrayList<Drive> result = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("select f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - SUM(r.anzPlaetze) as freiplätze from dbp105.fahrt f INNER JOIN dbp105.reservieren r ON f.fid = r.fahrt WHERE f.status = 'offen' GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten");
+            PreparedStatement ps = connection.prepareStatement("select f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - SUM(CASE WHEN r.anzPlaetze <> NULL THEN r.anzPlaetze ELSE 0 END) as freiplätze from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt WHERE f.status = 'offen' GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Drive drive = new Drive();
