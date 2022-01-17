@@ -31,7 +31,7 @@ public final class DriveStore implements Closeable {
         ArrayList<Drive> result = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("select f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - SUM(CASE WHEN r.anzPlaetze <> NULL THEN r.anzPlaetze ELSE 0 END) as freiplätze from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt WHERE f.status = 'offen' GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten");
+            PreparedStatement ps = connection.prepareStatement("select f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - SUM(CASE WHEN r.anzPlaetze <> NULL THEN r.anzPlaetze ELSE 0 END) as freiplätze from dbp171.fahrt f LEFT JOIN dbp171.reservieren r ON f.fid = r.fahrt WHERE f.status = 'offen' GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Drive drive = new Drive();
@@ -53,7 +53,7 @@ public final class DriveStore implements Closeable {
         usr.setBID(2);
 
         try {
-            PreparedStatement ps = connection.prepareStatement("select * from dbp105.reservieren r INNER JOIN dbp105.benutzer b ON b.bid = ? INNER JOIN dbp105.fahrt f ON r.fahrt = f.fid WHERE r.kunde = b.bid");
+            PreparedStatement ps = connection.prepareStatement("select * from dbp171.reservieren r INNER JOIN dbp171.benutzer b ON b.bid = ? INNER JOIN dbp171.fahrt f ON r.fahrt = f.fid WHERE r.kunde = b.bid");
             ps.setInt(1, usr.getBID());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

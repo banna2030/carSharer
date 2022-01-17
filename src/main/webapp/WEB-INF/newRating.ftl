@@ -4,12 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Fahrt bewerten</title>
     <style>
       body {
@@ -18,7 +13,24 @@
       .container {
         max-width: 800px;
       }
+      }
     </style>
+    <<script type="text/javascript">
+      function fn1(){
+        var notValid=     !document.getElementById("rd1").checked
+                && !document.getElementById("rd2").checked
+                && !document.getElementById("rd3").checked
+                && !document.getElementById("rd4").checked
+                && !document.getElementById("rd5").checked
+                || document.getElementById("review").value=="";
+        if(notValid)
+          alert("Bitte Bewertung und Rating Eingeben!");
+        else {
+          alert("Danke für Ihre Bewertung!");
+          window.location.href = 'view_drive';
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="container py-4">
@@ -66,49 +78,50 @@
           <form>
             <!-- text review area -->
             <div class="form-group row mb-5">
-              <label for="review" class="col-sm-3 col-form-label">Bewertung:</label>
-              <textarea class="col-sm-9" id="review" rows="7"></textarea>
+              <label for="review" class="col-sm-3 col-form-label" >Bewertung:</label>
+
+              <textarea class="col-sm-9" id="review" name="review" rows="7" placeholder="Leave your comment here"></textarea>
+
             </div>
             <!-- nummerical rating area -->
             <div class="form-group row mb-5">
-              <label for="review" class="col-sm-3 col-form-label">Rating:</label>
+              <label class="col-sm-3 col-form-label">rating:</label>
               <!-- choices -->
               <div class="col-sm-9">
                 <!-- 1 -->
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="Rating" id="1" value="1" />
-                  <label class="form-check-label" for="1"> 1 </label>
+                  <input class="form-check-input" type="radio" name="rating" id="rd1" value="1" />
+                  <label class="form-check-label" for="rd1"> 1 </label>
                 </div>
                 <!-- 2 -->
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="Rating" id="2" value="2" />
-                  <label class="form-check-label" for="2"> 2 </label>
+                  <input class="form-check-input" type="radio" name="rating" id="rd2" value="2" />
+                  <label class="form-check-label" for="rd2"> 2 </label>
                 </div>
                 <!-- 3 -->
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="Rating" id="3" value="3" />
-                  <label class="form-check-label" for="3"> 3 </label>
+                  <input class="form-check-input" type="radio" name="rating" id="rd3" value="3" />
+                  <label class="form-check-label" for="rd3"> 3 </label>
                 </div>
                 <!-- 4 -->
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="Rating" id="4" value="4" />
-                  <label class="form-check-label" for="4"> 4 </label>
+                  <input class="form-check-input" type="radio" name="rating" id="rd4" value="4" />
+                  <label class="form-check-label" for="rd4"> 4 </label>
                 </div>
                 <!-- 5 -->
                 <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="Rating"
-                    id="5"
-                    value="5"
-                    checked
-                  />
-                  <label class="form-check-label" for="5"> 5 </label>
+                  <input class="form-check-input" type="radio" name="rating" id="rd5" value="5" />
+                  <label class="form-check-label" for="rd5"> 5 </label>
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary d-block mb-2 float-end">Bewerten</button>
+            <!-- submit button-->
+            <input type="submit"
+                   class="btn btn-primary d-block mb-2 float-end alert"
+                   value="Bewerten"
+                   onclick="fn1()"
+            />
+
           </form>
         </div>
       </div>
