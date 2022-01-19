@@ -47,16 +47,6 @@
 		<servlet-name>freemarker</servlet-name>
 		<url-pattern>*.ftl</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>hello_servlet</servlet-name>
-		<servlet-class>de.unidue.inf.is.HelloServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>hello_servlet</servlet-name>
-		<url-pattern>/hello</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>carSharer_servlet</servlet-name>
@@ -126,6 +116,16 @@
 	<servlet-mapping>
 		<servlet-name>bestDriver_servlet</servlet-name>
 		<url-pattern>/bonus</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Message_Servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.MessageServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Message_Servlet</servlet-name>
+		<url-pattern>/feedback</url-pattern>
 	</servlet-mapping>
 
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 

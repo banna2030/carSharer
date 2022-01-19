@@ -1,6 +1,6 @@
 package de.unidue.inf.is;
 
-import de.unidue.inf.is.stores.ReviewStore;
+import de.unidue.inf.is.stores.RatingStore;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ public class NewRatingServlet extends HttpServlet {
      * @autor Osama Elsafty
      */
     private static final long serialVersionUID = 1L;
-    ReviewStore reviewStore = new ReviewStore();
+    RatingStore ratingStore = new RatingStore();
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req,resp);
@@ -30,12 +30,12 @@ public class NewRatingServlet extends HttpServlet {
         if(req.getParameter("review")!="" && req.getParameter("rating")!=null ) {
             textReview = req.getParameter("review");
             rating = Integer.parseInt(req.getParameter("rating"));
-            reviewStore.setReview(textReview);
-            reviewStore.setRating(rating);
-            reviewStore.setDateAndTime(getCurrentDateAndTime());
-            reviewStore.sendReview();
-            reviewStore.complete();
-            reviewStore.close();
+            ratingStore.setReview(textReview);
+            ratingStore.setRating(rating);
+            ratingStore.setDateAndTime(getCurrentDateAndTime());
+            ratingStore.sendReview();
+            ratingStore.complete();
+            ratingStore.close();
            // System.out.println("sent to store!");
         }
         //testing values passing:

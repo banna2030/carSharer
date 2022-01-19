@@ -13,7 +13,6 @@
       .container {
         max-width: 800px;
       }
-      }
     </style>
     <<script type="text/javascript">
       function fn1(){

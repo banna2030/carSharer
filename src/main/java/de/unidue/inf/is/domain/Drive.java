@@ -6,20 +6,59 @@ import de.unidue.inf.is.utils.DateTimeUtil;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public final class Drive {
     private int FID;
     private int BID;
     private int TID;
+    private String Anbieter;
     private float Fahrtkosten;
     private String Startort;
     private String Zielort;
     private String Status;
-    private DateTimeUtil FahrtDatum;
-    private DateTimeUtil Fahrtuhrzeit;
+    private Timestamp fahrtdatumzeit;
     private int Freiplätze;
     private int Maxplätze;
+    private String Icon;
+    private String Beschreibung;
+
+    public String getAnbieter() {
+        return Anbieter;
+    }
+
+    public void setAnbieter(String anbieter) {
+        Anbieter = anbieter;
+    }
+
+    public String getBeschreibung() {
+        return Beschreibung;
+    }
+
+    public void setBeschreibung(String beschreibung) {
+        if (beschreibung == null){
+            Beschreibung = "Keine Beschreibung";
+        }else {
+            Beschreibung = beschreibung;
+        }
+    }
+
+    public Timestamp getFahrtdatumzeit() {
+        return fahrtdatumzeit;
+    }
+
+    public void setFahrtdatumzeit(Timestamp fahrtdatumzeit) {
+        this.fahrtdatumzeit = fahrtdatumzeit;
+    }
+
+    public String getIcon() {
+        return Icon;
+    }
+
+    public void setIcon(String icon) {
+        Icon = icon;
+    }
 
     public int getBID() {
         return BID;
@@ -75,14 +114,6 @@ public final class Drive {
         Status = status;
     }
 
-    public void setFahrtDatum(DateTimeUtil fahrtDatum) {
-        FahrtDatum = fahrtDatum;
-    }
-
-    public void setFahrtuhrzeit(DateTimeUtil fahrtuhrzeit) {
-        Fahrtuhrzeit = fahrtuhrzeit;
-    }
-
     public int getFID() {
         return FID;
     }
@@ -103,14 +134,6 @@ public final class Drive {
         return Status;
     }
 
-    public DateTimeUtil getFahrtDatum() {
-        return FahrtDatum;
-    }
-
-    public DateTimeUtil getFahrtuhrzeit() {
-        return Fahrtuhrzeit;
-    }
-
     @Override
     public String toString() {
         return "Drive{" +
@@ -119,8 +142,6 @@ public final class Drive {
                 ", Startort='" + Startort + '\'' +
                 ", Zielort='" + Zielort + '\'' +
                 ", Status='" + Status + '\'' +
-                ", FahrtDatum=" + FahrtDatum +
-                ", Fahrtuhrzeit=" + Fahrtuhrzeit +
                 '}';
     }
 }

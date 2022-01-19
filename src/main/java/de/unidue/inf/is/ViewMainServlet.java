@@ -21,7 +21,7 @@ public class ViewMainServlet extends HttpServlet {
         ArrayList<Drive> listOfReservedDrives = drive.getReservedDrives();
         ArrayList<Drive> listOfOpenDrives = drive.getOpenDrives();
 
-        listOfReservedDrives.stream().forEach(System.out::println);
+        //listOfReservedDrives.stream().forEach(System.out::println);
         drive.complete();
         drive.close();
        req.setAttribute("reservedDrive", listOfReservedDrives);
