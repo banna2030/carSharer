@@ -54,7 +54,14 @@ public class NewDriveServlet extends HttpServlet {
             newDrive.setBeschreibung(description);
 
         DriveStore store= new DriveStore();
-        store.storeNewDrive(newDrive);
+        if(store.checkForLicense(newDrive)){
+            store.storeNewDrive(newDrive);
+            MessageServlet messageServlet = new MessageServlet("Fahrt erfolgreich erstellt!","Erfolgreich erstellten", true);
+            messageServlet.doGet(req,resp);
+        } else{
+            MessageServlet messageServlet = new MessageServlet("Sie dürfen keine Fahrt erstellen ohne Erlaubnis zu haben","keine Erlaubnis", false);
+            messageServlet.doGet(req,resp);
+        }
         store.complete();
         store.close();
         doGet(req, resp);

@@ -116,7 +116,7 @@ public final class DriveStore implements Closeable {
             ps.setFloat(5,newDrive.getFahrtkosten());
             ps.setInt(7,newDrive.getTransportmittel());
             ps.setString(8,newDrive.getBeschreibung());
-            ps.setInt(6,2);
+            ps.setInt(6,User.loggedInBID);
             ps.executeUpdate();
 
             System.out.println(newDrive.getFahrtkosten());
@@ -126,6 +126,28 @@ public final class DriveStore implements Closeable {
         }
 
     }
+
+    public boolean checkForLicense(Drive newDrive) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp105.fahrerlaubnis WHERE fahrer=?");
+            ps.setInt(1,User.loggedInBID);
+            ResultSet rs= ps.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("ablaufdatum").compareTo(String.valueOf(newDrive.getFahrtdatumzeit()))>0) {
+                    System.out.println("License ends on: " + rs.getString("ablaufdatum"));
+                    System.out.println("Drive date: "+ String.valueOf(newDrive.getFahrtdatumzeit()));
+                    return true;
+                }
+
+            }
+                return false;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+
 
 
     public void complete() {

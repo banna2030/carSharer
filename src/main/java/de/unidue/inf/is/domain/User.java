@@ -6,7 +6,7 @@ public final class User {
     private String Email;
     private int BID;
     private int Anplätze;
-    public static int loggedInBID=2;
+    public static int loggedInBID=3;
 
 
     public int getAnplätze() {

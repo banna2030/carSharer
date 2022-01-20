@@ -17,6 +17,7 @@ public class ViewMainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("2025-01-17.11.22.33.123456".compareTo("2023-05-17.11.22.33.123456"));
         DriveStore drive = new DriveStore();
         ArrayList<Drive> listOfReservedDrives = drive.getReservedDrives();
         ArrayList<Drive> listOfOpenDrives = drive.getOpenDrives();
