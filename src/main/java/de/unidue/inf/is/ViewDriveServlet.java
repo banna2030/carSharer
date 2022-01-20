@@ -47,7 +47,7 @@ public class ViewDriveServlet extends HttpServlet {
         Drive drive = new Drive();
         RatingStore ratingStore = new RatingStore();
         drive.setFID(Integer.parseInt(req.getQueryString().substring(4,5)));
-        user.setBID(2);
+        user.setBID(User.loggedInBID);
         System.out.println(drive.getBID() + drive.getFID());
 
         if(req.getQueryString().substring(6).equals("delete")){

@@ -56,7 +56,7 @@
             </tbody>
         </table>
     </div>
-    <button type="button" onclick="location.href='new_drive';" class="btn btn-primary d-block mb-2">Fahrt</button>
+    <button type="button" onclick="location.href='new_drive';" class="btn btn-primary d-block mb-2">Fahrt Erstellen</button>
 </div>
 
 <#include "footer.ftl">

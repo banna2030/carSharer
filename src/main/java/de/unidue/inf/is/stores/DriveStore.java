@@ -52,7 +52,7 @@ public final class DriveStore implements Closeable {
     public ArrayList<Drive> getReservedDrives() throws StoreException {
         ArrayList<Drive> result = new ArrayList<>();
         User usr = new User();
-        usr.setBID(2);
+        usr.setBID(User.loggedInBID);
 
         try {
             PreparedStatement ps = connection.prepareStatement("select * from dbp105.reservieren r INNER JOIN dbp105.benutzer b ON b.bid = ? INNER JOIN dbp105.fahrt f ON r.fahrt = f.fid INNER JOIN dbp105.transportmittel t ON t.tid = f.transportmittel WHERE r.kunde = b.bid");

@@ -45,14 +45,8 @@
         <!-- Navbar -->
         <div class="mb-3 rounded shadow-sm">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div>
-                    <img
-                            src="./Images/car.png"
-                            width="30"
-                            height="30"
-                            class="d-inline-block align-top"
-                            alt=""
-                    />
+                <div class="mx-4">
+                    <img src="./Images/car.png" width="30" height="30" class="d-inline-block align-top" alt=""/>
                     <a class="navbar-brand" href="/view_main">CarSharer</a>
                 </div>
                 <!-- Hamburger Menu -->
@@ -69,10 +63,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link active" href="/new_drive">Fahrt Erstellen</a>
-                        <a class="nav-item nav-link active" href="/view_search">Fahrt suchen</a>
-                        <a class="nav-item nav-link active" href="/bonus">Bester Fahrer</a>
-                        <a class="nav-item nav-link active" href="/new_rating">Fahrt bewerten</a>
+                        <a class="nav-item nav-link active mx-4" href="/new_drive">Fahrt Erstellen</a>
+                        <a class="nav-item nav-link active mx-4" href="/view_search">Fahrt suchen</a>
+                        <a class="nav-item nav-link active mx-4" href="/bonus">Bester Fahrer</a>
                     </div>
                 </div>
             </nav>

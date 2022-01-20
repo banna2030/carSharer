@@ -11,14 +11,14 @@
         </div>
         <ul class="list-group list-group-flush">
             <#list driveInformation as di>
-                <li class="list-group-item">Anbieter: ${di.getAnbieter()}</li>
-                <li class="list-group-item">Fahrtdatum und Uhrzeit: ${di.getFahrtdatumzeit()}</li>
-                <li class="list-group-item">Von: ${di.getStartort()}</li>
-                <li class="list-group-item">Nach: ${di.getZielort()}</li>
-                <li class="list-group-item">Anzahl freier pl&auml;tze: ${di.getFreiplätze()}</li>
-                <li class="list-group-item">Fahrkosten: ${di.getFahrtkosten()}</li>
-                <li class="list-group-item">Status: ${di.getStatus()}</li>
-                <li class="list-group-item">Beschreibung: ${di.getBeschreibung()}</li>
+                <li class="list-group-item"><b>Anbieter:</b> ${di.getAnbieter()}</li>
+                <li class="list-group-item"><b>Fahrtdatum und Uhrzeit: </b> ${di.getFahrtdatumzeit()}</li>
+                <li class="list-group-item"><b>Von: </b> ${di.getStartort()}</li>
+                <li class="list-group-item"><b>Nach: </b> ${di.getZielort()}</li>
+                <li class="list-group-item"><b>Anzahl freier pl&auml;tze: </b> ${di.getFreiplätze()}</li>
+                <li class="list-group-item"><b>Fahrkosten: </b> ${di.getFahrtkosten()}</li>
+                <li class="list-group-item"><b>Status: </b> ${di.getStatus()}</li>
+                <li class="list-group-item"><b>Beschreibung: </b> ${di.getBeschreibung()}</li>
 
         </ul>
     </div>

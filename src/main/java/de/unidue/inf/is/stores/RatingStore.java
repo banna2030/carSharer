@@ -61,38 +61,68 @@ public class RatingStore implements Closeable {
 
 
     //Database interaction variables and functions
-
-    private String review;
-    private int rating;
-    private String dateAndTime;
-    private static final String SqlsendReview = "INSERT INTO dbp171.bewertung " +
+    private static final String SqlInsertToBewertung = "INSERT INTO dbp105.bewertung " +
             "(textnachricht, erstellungsdatum, rating) VALUES " +
             "(?,?,?)";
     //            "('testcode','2022-01-17.11.22.33.123456',3);";
-    public void setReview(String review) {
-        this.review = review;
-       // System.out.println("got a value for review, it is: " + review);
-    }
-    public void setRating(int rating) {
-        this.rating = rating;
-       // System.out.println("got a value for rating, it is: " + rating);
-    }
-    public void setDateAndTime(String dateAndTime) {
-        this.dateAndTime = dateAndTime;
-       // System.out.println("got a value for dateAndTime, it is: " + dateAndTime);
+    private static final String sqlGetBEID="SELECT beid FROM dbp105.bewertung " +
+            "WHERE textnachricht LIKE ? AND erstellungsdatum=? AND rating=?";
+    // like is used for CLOB attributes
 
-    }
+    private static final String SqlInsertToSchreiben ="INSERT INTO dbp105.schreiben " +
+            "(benutzer, fahrt, bewertung) VALUES (?,?,?)";
 
-    public void sendReview() throws RuntimeException{
+
+    public boolean sendReview(int bid, int fid, String review, int rating, String dateAndTime) throws RuntimeException{
+        System.out.println("recived values \n bid: "+bid + "\n fid: "+ fid + "\nreview: " + review + "\nrating: " + rating + "\ndate and time: "+ dateAndTime);
+        int beid=-1;
         try {
-            PreparedStatement ps = connection.prepareStatement(SqlsendReview);
+            PreparedStatement ps = connection.prepareStatement(SqlInsertToBewertung);
             //setting place holders
             ps.setString(1, review);
             ps.setString(2, dateAndTime);
             ps.setInt(3, rating);
             ps.executeUpdate();
+            System.out.println("inserted to bewertung");
+
+            //linking to the user and the drive
+               //getting the id of the the newly added review
+            PreparedStatement ps2 = connection.prepareStatement(sqlGetBEID);
+            ps2.setString(1, review);
+            ps2.setString(2, dateAndTime);
+            ps2.setInt(3, rating);
+            ResultSet rs2= ps2.executeQuery();
+
+            if (rs2.next()) {
+                beid = rs2.getInt("beid");
+            }
+
+            System.out.println("got the value of beid: " + beid);
+
+            //saving to table "schreiben"
+            PreparedStatement ps3 = connection.prepareStatement(SqlInsertToSchreiben);
+            ps3.setInt(1,bid);
+            ps3.setInt(2,fid);
+            ps3.setInt(3,beid);
+            System.out.println("BID: "+ bid + "\nfid" + fid + "\nbeid"+ beid);
+            ps3.executeUpdate();
+            System.out.println("inserted to schreiben");
+            return true;
+
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //exception happens when user tries to add 2nd review for the same drive
+            //the exception happens when we link the (Already made) "Bewertung" into schreiben
+            // deleting the made row in table bewertung if it can't be linked
+            try {
+                PreparedStatement ps = connection.prepareStatement("DELETE FROM dbp105.bewertung WHERE beid=?");
+                ps.setInt(1, beid);
+                ps.executeUpdate();
+                System.out.println("Bewertung deleted");
+            } catch (SQLException throwables) {
+                System.out.println("couldn't be deleted");
+            }
+
+            return false;
         }
     }
 
