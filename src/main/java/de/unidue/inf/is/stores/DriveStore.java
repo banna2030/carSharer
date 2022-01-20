@@ -101,6 +101,31 @@ public final class DriveStore implements Closeable {
         }
         return drive;
     }
+    public void storeNewDrive(Drive newDrive) throws StoreException{
+
+
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO dbp105.fahrt (startort,zielort,fahrtdatumzeit,maxPlaetze,fahrtkosten,anbieter,transportmittel,beschreibung) VALUES (?,?,?,?,?,?,?,?)");
+
+
+            ps.setString(1,newDrive.getStartort());
+            ps.setString(2,newDrive.getZielort());
+            ps.setTimestamp(3,newDrive.getFahrtdatumzeit());
+            ps.setInt(4,newDrive.getMaxplätze());
+            ps.setFloat(5,newDrive.getFahrtkosten());
+            ps.setInt(7,newDrive.getTransportmittel());
+            ps.setString(8,newDrive.getBeschreibung());
+            ps.setInt(6,2);
+            ps.executeUpdate();
+
+            System.out.println(newDrive.getFahrtkosten());
+
+        } catch (SQLException e) {
+            throw new StoreException(e);
+        }
+
+    }
 
 
     public void complete() {

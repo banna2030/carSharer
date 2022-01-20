@@ -3,7 +3,7 @@
     <div class="card mb-5 rounded shadow-sm">
         <div class="card-body">
                 <h2>Fahrt erstellen</h2>
-            <form>
+            <form method="post" >
                 <div class="form-group row mb-2">
                     <label for="from" class="col-sm-3 col-form-label">Von:</label>
                     <div class="col-sm-9">
@@ -19,7 +19,7 @@
                 <div class="form-group row mb-2">
                     <label for="capcity" class="col-sm-3 col-form-label">Maximale Kapzität:</label>
                     <div class="col-sm-9">
-                        <input name="capacity" type="number" min="1" id="capcity" class="form-control">
+                        <input name="capacity" type="number" min="1" max="10" id="capcity" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
@@ -32,19 +32,19 @@
                     <label for="" class="col-sm-3 col-form-label">Transportmittel:</label>
                     <div class="col-sm-9">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="Transportmittel" id="Auto" value="Auto" checked>
+                            <input class="form-check-input" type="radio" name="Transportmittel" id="Auto" value="1" checked>
                             <label class="form-check-label" for="Auto">
                                 Auto
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="Transportmittel" id="Bus" value="Bus">
+                            <input class="form-check-input" type="radio" name="Transportmittel" id="Bus" value="2">
                             <label class="form-check-label" for="Bus">
                                 Bus
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="Transportmittel" id="Kleintransporter" value="Kleintransporter">
+                            <input class="form-check-input" type="radio" name="Transportmittel" id="Kleintransporter" value="3">
                             <label class="form-check-label" for="Kleintransporter">
                                 Kleintransporter
                             </label>
@@ -53,11 +53,10 @@
                 </div>
                 <div class="form-group row mb-2">
                     <label for="Fahrtdatum" class="col-sm-3 col-form-label">Fahrtdatum:</label>
-                    <div class="col-sm-5">
-                        <input type="date" id="Fahrtdatum" name="trip-start" value="2022-02-12" min="2022-01-01" max="2022-12-31"class="form-control">
-                    </div>
-                    <div class="col-sm-4">
-                        <input type="time" id="Fahrtdatum" name="appt" value="12:00"min="00:00" max="24:00" class="form-control">
+                    <div class="col-sm-7">
+                        <div class="p-0 col-sm-7 mb-2">
+                                                    <input type="datetime-local" name="Fahrtdatum" class="form-control mb-2" required/>
+                                                </div>
                     </div>
                 </div>
                 <div class="form-group row mb-2">

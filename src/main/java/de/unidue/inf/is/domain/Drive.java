@@ -23,6 +23,7 @@ public final class Drive {
     private int Maxplätze;
     private String Icon;
     private String Beschreibung;
+    private int transportmittel;
 
     public String getAnbieter() {
         return Anbieter;
@@ -143,5 +144,13 @@ public final class Drive {
                 ", Zielort='" + Zielort + '\'' +
                 ", Status='" + Status + '\'' +
                 '}';
+    }
+
+    public int getTransportmittel() {
+        return transportmittel;
+    }
+
+    public void setTransportmittel(int transportmittel) {
+        this.transportmittel = transportmittel;
     }
 }
