@@ -35,8 +35,8 @@ public final class UserStore implements Closeable {
      */
     public User getBestDriver() {
 
-        String bestDriverSQL=
-                "SELECT * FROM dbp105.benutzer b INNER JOIN (SELECT anbieter,avgRating FROM( (SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter) INNER JOIN (SELECT MAX(avgRating) as avgr FROM ( SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter ) ) ON avgRating=avgr )) ON b.bid=anbieter";
+        String bestDriverSQL="SELECT * FROM( dbp105.benutzer b INNER JOIN (SELECT anbieter,avgRating FROM( (SELECT anbieter, AVG(rating) AS avgRating FROM( SELECT f.fid, f.anbieter, b.rating FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt) INNER JOIN dbp105.bewertung b ON b.beid= s.bewertung ) GROUP BY anbieter) INNER JOIN (SELECT MAX(avgRating) as maxAvgRating FROM ( SELECT anbieter, AVG(rating) AS avgRating FROM( SELECT f.fid, f.anbieter, b.rating FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) INNER JOIN dbp105.bewertung b ON b.beid= s.bewertung ) GROUP BY anbieter ) ) ON avgRating=maxAvgRating ) )ON b.bid=anbieter )";
+
         User bestDriver = new User();
         try {
             PreparedStatement ps = connection.prepareStatement(bestDriverSQL);
@@ -57,12 +57,13 @@ public final class UserStore implements Closeable {
      * @return a float represents the average rating
      * @autor Osama Elsafty
      */
-    public float getBestDriverAverageRating() {
+    public float getAverageRating(User driver) {
 
-        String bestDriverSQL="SELECT * FROM dbp105.benutzer b INNER JOIN (SELECT anbieter,avgRating FROM( (SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter) INNER JOIN (SELECT MAX(avgRating) as avgr FROM ( SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter ) ) ON avgRating=avgr )) ON b.bid=anbieter";
+        String bestDriverSQL="SELECT AVG(rating) as AVGRATING FROM (dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) INNER JOIN dbp105.bewertung b ON b.beid = s.bewertung where anbieter = ?";
         float averageRating = -1;
         try {
             PreparedStatement ps = connection.prepareStatement(bestDriverSQL);
+            ps.setInt(1,driver.getBID());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 averageRating=rs.getFloat("AVGRATING");

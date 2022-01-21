@@ -21,7 +21,7 @@ public class BestDriverServlet extends HttpServlet {
         UserStore userStore = new UserStore();
         User bestDriver = userStore.getBestDriver();
 //        System.out.println("best driver id: " + bestDriver.getBID());
-        float averageRating = userStore.getBestDriverAverageRating();
+        float averageRating = userStore.getAverageRating(bestDriver);
 //        System.out.println("in doGet \n Email:" + bestDriver.getEmail() + "\nAVGRT: "+ averageRagting);
         userStore.complete();
         userStore.close();

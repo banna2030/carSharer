@@ -31,8 +31,6 @@ public class NewRatingServlet extends HttpServlet {
             textReview = req.getParameter("review");
             rating = Integer.parseInt(req.getParameter("rating"));
             state = ratingStore.sendReview(currentUserId,fid,textReview,rating,getCurrentDateAndTime());
-            ratingStore.complete();
-            ratingStore.close();
             // System.out.println("sent to store!");
         }
         if (state == true) {
@@ -42,6 +40,8 @@ public class NewRatingServlet extends HttpServlet {
             MessageServlet messageServlet = new MessageServlet("Sie dürfen dieselbe Fahrt nicht zwei Mal bewerten","zweite Bewertung", false);
             messageServlet.doGet(req,resp);
         }
+        ratingStore.complete();
+        ratingStore.close();
         doGet(req,resp);
     }
 
