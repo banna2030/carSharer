@@ -10,12 +10,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * takes the end user inputs from the page newRating.ftl
+ * and pass it to the ReviewStore where it gets stored in the database
+ * @autor Osama Elsafty
+ */
 public class NewRatingServlet extends HttpServlet {
-    /**
-     * takes the end user inputs from the page newRating.ftl
-     * and pass it to the ReviewStore where it gets stored in the database
-     * @autor Osama Elsafty
-     */
+
     private static final long serialVersionUID = 1L;
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,6 +56,8 @@ public class NewRatingServlet extends HttpServlet {
         //testing values passing:
        // System.out.println("\n"+ req.getParameter("review") + " "+ req.getParameter("rating") + "\n");
     }
+
+    //gets the current date and time as string in the timestamp format
     private String getCurrentDateAndTime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss.000000");
         LocalDateTime now = LocalDateTime.now();

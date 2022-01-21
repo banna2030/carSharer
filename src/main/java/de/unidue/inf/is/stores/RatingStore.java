@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class RatingStore implements Closeable {
     /**
      * inserting new review to the database with the parameters passed from NewRatingServlet
-     * @autor Osama Elsafty
+     * @autor Team-work
      */
     //connection variables and functions
     private Connection connection;
@@ -59,22 +59,26 @@ public class RatingStore implements Closeable {
         }
     }
 
-
-    //Database interaction variables and functions
-    private static final String SqlInsertToBewertung = "INSERT INTO dbp105.bewertung " +
-            "(textnachricht, erstellungsdatum, rating) VALUES " +
-            "(?,?,?)";
-    //            "('testcode','2022-01-17.11.22.33.123456',3);";
-    private static final String sqlGetBEID="SELECT beid FROM dbp105.bewertung " +
-            "WHERE textnachricht LIKE ? AND erstellungsdatum=? AND rating=?";
-    // like is used for CLOB attributes
-
-    private static final String SqlInsertToSchreiben ="INSERT INTO dbp105.schreiben " +
-            "(benutzer, fahrt, bewertung) VALUES (?,?,?)";
-
-
+    /**
+     * makes a new review "bewertung" and tries to link it to the current user and the drive (in table "screiben"
+     * if the linking failed (happens if user has already reviewed the same drive before
+     * the function deletes the made review from table "bewertung"
+     * @returns true if adding and linking is successful, false otherwise
+     * @autor Osama Elsafty
+     */
     public boolean sendReview(int bid, int fid, String review, int rating, String dateAndTime) throws RuntimeException{
-        System.out.println("recived values \n bid: "+bid + "\n fid: "+ fid + "\nreview: " + review + "\nrating: " + rating + "\ndate and time: "+ dateAndTime);
+        final String sqlGetBEID="SELECT beid FROM dbp105.bewertung " +
+                "WHERE textnachricht LIKE ? AND erstellungsdatum=? AND rating=?";
+        // like is used for CLOB attributes
+        final String SqlInsertToSchreiben ="INSERT INTO dbp105.schreiben " +
+                "(benutzer, fahrt, bewertung) VALUES (?,?,?)";
+        final String SqlInsertToBewertung = "INSERT INTO dbp105.bewertung " +
+                "(textnachricht, erstellungsdatum, rating) VALUES " +
+                "(?,?,?)";
+        final String sqlDeleteFromBewertung = "DELETE FROM dbp105.bewertung WHERE beid=?";
+
+//        System.out.println("recived values \n bid: "+bid + "\n fid: "+ fid + "\nreview: " + review + "\nrating: " + rating + "\ndate and time: "+ dateAndTime);
+
         int beid=-1;
         try {
             PreparedStatement ps = connection.prepareStatement(SqlInsertToBewertung);
@@ -114,7 +118,7 @@ public class RatingStore implements Closeable {
             //the exception happens when we link the (Already made) "Bewertung" into schreiben
             // deleting the made row in table bewertung if it can't be linked
             try {
-                PreparedStatement ps = connection.prepareStatement("DELETE FROM dbp105.bewertung WHERE beid=?");
+                PreparedStatement ps = connection.prepareStatement(sqlDeleteFromBewertung);
                 ps.setInt(1, beid);
                 ps.executeUpdate();
                 System.out.println("Bewertung deleted");

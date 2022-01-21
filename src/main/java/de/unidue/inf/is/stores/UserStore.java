@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.unidue.inf.is.domain.User;
@@ -19,7 +20,7 @@ public final class UserStore implements Closeable {
 
     public UserStore() throws StoreException {
         try {
-            connection = DBUtil.getConnection();
+            connection = DBUtil.getExternalConnection();
             connection.setAutoCommit(false);
         }
         catch (SQLException e) {
@@ -27,23 +28,54 @@ public final class UserStore implements Closeable {
         }
     }
 
+    /**
+     * a function to get the driver (user) that has the best average rating on database
+     * @return an instance from class User with the best driver data
+     * @autor Osama Elsafty
+     */
+    public User getBestDriver() {
 
-    public void addUser(User userToAdd) throws StoreException {
+        String bestDriverSQL=
+                "SELECT * FROM dbp105.benutzer b INNER JOIN (SELECT anbieter,avgRating FROM( (SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter) INNER JOIN (SELECT MAX(avgRating) as avgr FROM ( SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter ) ) ON avgRating=avgr )) ON b.bid=anbieter";
+        User bestDriver = new User();
         try {
-            PreparedStatement preparedStatement = connection
-                            .prepareStatement("insert into user (firstname, lastname) values (?, ?)");
-            preparedStatement.executeUpdate();
+            PreparedStatement ps = connection.prepareStatement(bestDriverSQL);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                bestDriver.setBID(rs.getInt("bid"));
+                bestDriver.setName(rs.getString("name"));
+                bestDriver.setEmail(rs.getString("email"));
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        catch (SQLException e) {
-            throw new StoreException(e);
-        }
+        return bestDriver;
     }
 
+    /**
+     * a function to get the average rating of the best driver
+     * @return a float represents the average rating
+     * @autor Osama Elsafty
+     */
+    public float getBestDriverAverageRating() {
+
+        String bestDriverSQL="SELECT * FROM dbp105.benutzer b INNER JOIN (SELECT anbieter,avgRating FROM( (SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter) INNER JOIN (SELECT MAX(avgRating) as avgr FROM ( SELECT anbieter, CAST(AVG(CAST(bewertung as FLOAT)) AS DECIMAL(4,2)) AS avgRating FROM( SELECT f.fid, f.anbieter, s.bewertung FROM( dbp105.fahrt f INNER JOIN dbp105.schreiben s ON f.fid= s.fahrt ) ) GROUP BY anbieter ) ) ON avgRating=avgr )) ON b.bid=anbieter";
+        float averageRating = -1;
+        try {
+            PreparedStatement ps = connection.prepareStatement(bestDriverSQL);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                averageRating=rs.getFloat("AVGRATING");
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return averageRating;
+    }
 
     public void complete() {
         complete = true;
     }
-
 
     @Override
     public void close() throws IOException {

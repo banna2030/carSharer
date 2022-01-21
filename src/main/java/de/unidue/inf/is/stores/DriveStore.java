@@ -101,10 +101,8 @@ public final class DriveStore implements Closeable {
         }
         return drive;
     }
+
     public void storeNewDrive(Drive newDrive) throws StoreException{
-
-
-
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO dbp105.fahrt (startort,zielort,fahrtdatumzeit,maxPlaetze,fahrtkosten,anbieter,transportmittel,beschreibung) VALUES (?,?,?,?,?,?,?,?)");
 
@@ -127,6 +125,13 @@ public final class DriveStore implements Closeable {
 
     }
 
+    /**
+     * a function to check whether a User has license or not (in order to check if he/she is allowed to make new drive)
+     * the function checks also if the existing license of that user will be valid on the date that he is trying
+     * to make a drive on
+     * @return true for valid license on the wanted date, false otherwise
+     * @autor Osama Elsafty
+     */
     public boolean checkForLicense(Drive newDrive) {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp105.fahrerlaubnis WHERE fahrer=?");
@@ -147,8 +152,34 @@ public final class DriveStore implements Closeable {
         }
     }
 
+    /**
+     * a finction that brings the open drives of a specific given user
+     * @return Array of drives
+     * @autors Osama Elsafty, Ahmed Omran
+     */
+    public ArrayList<Drive> getOpenDrives(User driver) {
+        String sqlGetUserOpenDrives = "select f.fid, f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - SUM(CASE WHEN r.anzPlaetze <> NULL THEN r.anzPlaetze ELSE 0 END) as freiplätze, t.icon from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid WHERE f.status = 'offen' AND f.anbieter=? GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten, t.icon";
+        ArrayList<Drive> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sqlGetUserOpenDrives);
+            ps.setInt(1,driver.getBID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Drive drive = new Drive();
+                drive.setStartort(rs.getString("startort"));
+                drive.setZielort(rs.getString("zielort"));
+                drive.setFreiplätze(rs.getInt("freiplätze"));
+                drive.setFahrtkosten(rs.getFloat("fahrtkosten"));
+                drive.setIcon(rs.getString("icon"));
+                drive.setFID(rs.getInt("fid"));
+                result.add(drive);
+            }
 
-
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return result;
+    }
 
     public void complete() {
         complete = true;
