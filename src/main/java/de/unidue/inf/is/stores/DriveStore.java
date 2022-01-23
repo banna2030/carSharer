@@ -57,7 +57,7 @@ public final class DriveStore implements Closeable {
     public ArrayList<Drive> getReservedDrives() throws StoreException {
         ArrayList<Drive> result = new ArrayList<>();
         User usr = new User();
-        usr.setBID(User.loggedInBID);
+        //usr.setBID(User.loggedInBID);
 
         try {
             PreparedStatement ps = connection.prepareStatement("select * from dbp105.reservieren r INNER JOIN dbp105.benutzer b ON b.bid = ? INNER JOIN dbp105.fahrt f ON r.fahrt = f.fid INNER JOIN dbp105.transportmittel t ON t.tid = f.transportmittel WHERE r.kunde = b.bid");
@@ -114,9 +114,9 @@ public final class DriveStore implements Closeable {
     }
 
     public void storeNewDrive(Drive newDrive) throws StoreException{
+        User user = new User();
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO dbp105.fahrt (startort,zielort,fahrtdatumzeit,maxPlaetze,fahrtkosten,anbieter,transportmittel,beschreibung) VALUES (?,?,?,?,?,?,?,?)");
-
 
             ps.setString(1,newDrive.getStartort());
             ps.setString(2,newDrive.getZielort());
@@ -125,7 +125,7 @@ public final class DriveStore implements Closeable {
             ps.setFloat(5,newDrive.getFahrtkosten());
             ps.setInt(7,newDrive.getTransportmittel());
             ps.setString(8,newDrive.getBeschreibung());
-            ps.setInt(6,User.loggedInBID);
+            ps.setInt(6,user.getBID());
             ps.executeUpdate();
 
             System.out.println(newDrive.getFahrtkosten());
@@ -144,9 +144,10 @@ public final class DriveStore implements Closeable {
      * @autor Osama Elsafty
      */
     public boolean checkForLicense(Drive newDrive) {
+        User user = new User();
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp105.fahrerlaubnis WHERE fahrer=?");
-            ps.setInt(1,User.loggedInBID);
+            ps.setInt(1,user.getBID());
             ResultSet rs= ps.executeQuery();
             while (rs.next()) {
                 if (rs.getString("ablaufdatum").compareTo(String.valueOf(newDrive.getFahrtdatumzeit()))>0) {

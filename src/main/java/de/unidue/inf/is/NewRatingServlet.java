@@ -26,11 +26,11 @@ public class NewRatingServlet extends HttpServlet {
         boolean state = false;
         int rating;
         System.out.println("received fid: "+fid);
-        int currentUserId = User.loggedInBID;
+        User user = new User();
         if(req.getParameter("review")!="" && req.getParameter("rating")!=null ) {
             textReview = req.getParameter("review");
             rating = Integer.parseInt(req.getParameter("rating"));
-            state = ratingStore.sendReview(currentUserId,fid,textReview,rating,getCurrentDateAndTime());
+            state = ratingStore.sendReview(user.getBID(),fid,textReview,rating,getCurrentDateAndTime());
             // System.out.println("sent to store!");
         }
         if (state == true) {

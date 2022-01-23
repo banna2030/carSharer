@@ -6,7 +6,6 @@ public final class User {
     private String Email;
     private int BID;
     private int Anplätze;
-    public static int loggedInBID=2;
 
 
     public int getAnplätze() {
@@ -41,5 +40,7 @@ public final class User {
         this.BID = BID;
     }
 
-    public User() {}
+    public User() {
+        this.BID = 2;
+    }
 }

@@ -53,7 +53,6 @@ public class ViewDriveServlet extends HttpServlet {
         DriveStore driveStore = new DriveStore();
 
         drive.setFID(Integer.parseInt(req.getParameter("FID").replaceAll("\\D+","")));
-        user.setBID(User.loggedInBID);
 
 
         if(queryString.substring(queryString.lastIndexOf("=") + 1).equals("delete")){
