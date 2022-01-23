@@ -178,4 +178,20 @@ public class RatingStore implements Closeable {
         return true;
     }
 
+    public Float getAverageRating(Drive drive) throws RuntimeException{
+        float avgRating = 0;
+        try{
+            PreparedStatement ps = connection.prepareStatement("select CAST(AVG(CAST(Rating AS DECIMAL(10,2))) AS DECIMAL(10,2)) from dbp105.schreiben s INNER JOIN dbp105.bewertung b ON s.bewertung = b.beid WHERE s.fahrt = ? GROUP BY fahrt");
+            ps.setInt(1, drive.getFID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                avgRating = rs.getFloat(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+        return avgRating;
+    }
+
 }

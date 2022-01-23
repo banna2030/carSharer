@@ -51,7 +51,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>Bewertungen</h2>
-                <h6>Durchschnittsrating:</h6>
+                <h6>Durchschnittsrating: ${avgRating}</h6>
             </div>
         <table class="table table-striped table-hover">
             <thead>

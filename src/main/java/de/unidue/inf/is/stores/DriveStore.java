@@ -29,9 +29,14 @@ public final class DriveStore implements Closeable {
 
     public ArrayList<Drive> getOpenDrives() throws StoreException {
         ArrayList<Drive> result = new ArrayList<>();
+        String sqlQuery = "select f.fid, f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - CASE WHEN EXISTS(select anzPlaetze from dbp105.reservieren WHERE fahrt = f.fid) THEN sum(r.anzPlaetze) ELSE 0 END as freiplätze, t.icon \n" +
+                "from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt \n" +
+                "INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid \n" +
+                "WHERE f.status = 'offen' \n" +
+                "GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten, t.icon";
 
         try {
-            PreparedStatement ps = connection.prepareStatement("select f.fid, f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - SUM(CASE WHEN r.anzPlaetze <> NULL THEN r.anzPlaetze ELSE 0 END) as freiplätze, t.icon from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid WHERE f.status = 'offen' GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten, t.icon");
+            PreparedStatement ps = connection.prepareStatement(sqlQuery);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Drive drive = new Drive();
@@ -76,10 +81,16 @@ public final class DriveStore implements Closeable {
 
     public Drive getDriveInformation(Drive drive) throws StoreException {
 
+        String sqlQuery = "select b.name, f.fahrtdatumzeit, f.startort, f.zielort,f.maxPlaetze - CASE WHEN EXISTS(select anzPlaetze from dbp105.reservieren WHERE fahrt = ?) THEN sum(r.anzPlaetze) ELSE 0 END as freiplätze, f.fahrtkosten, t.icon, f.status \n" +
+                "from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt\n" +
+                "INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid \n" +
+                "INNER JOIN dbp105.benutzer b ON b.bid = f.anbieter WHERE fid = ? \n" +
+                "GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten, t.icon, f.status, b.name, f.fahrtdatumzeit";
         try {
-            PreparedStatement ps = connection.prepareStatement("select b.name, f.fahrtdatumzeit, f.startort, f.zielort, f.maxPlaetze - SUM(CASE WHEN r.anzPlaetze <> NULL THEN r.anzPlaetze ELSE 0 END) as freiplätze, f.fahrtkosten, t.icon, f.status from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt  INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid INNER JOIN dbp105.benutzer b ON b.bid = f.anbieter WHERE fid = ? GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten, t.icon, f.status, b.name, f.fahrtdatumzeit");
+            PreparedStatement ps = connection.prepareStatement(sqlQuery);
             PreparedStatement ps2 = connection.prepareStatement("select f.beschreibung from dbp105.fahrt f WHERE f.fid = ?");
             ps.setInt(1, drive.getFID());
+            ps.setInt(2, drive.getFID());
             ps2.setInt(1, drive.getFID());
             ResultSet rs = ps.executeQuery();
             ResultSet r2 = ps2.executeQuery();
