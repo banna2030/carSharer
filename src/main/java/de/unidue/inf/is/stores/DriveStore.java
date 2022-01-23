@@ -135,6 +135,33 @@ public final class DriveStore implements Closeable {
         }
 
     }
+    public ArrayList<Drive> getSearchDrives(Drive search) throws StoreException {
+        ArrayList<Drive> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT f.startort,f.zielort,f.fahrtkosten,f.fahrtdatumzeit, t.icon from dbp105.fahrt f INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid WHERE status = 'offen' AND f.startort = ? AND f.zielort =? AND f.fahrtdatumzeit >= ?");
+
+
+            ps.setString(1, search.getStartort());
+            ps.setString(2,search.getZielort());
+            ps.setTimestamp(3,search.getFahrtdatumzeit());
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                search.setStartort(rs.getString("startort"));
+                search.setZielort(rs.getString("zielort"));
+                search.setIcon(rs.getString("icon"));
+                search.setFahrtkosten(rs.getFloat("fahrtkosten"));
+                search.setFahrtdatumzeit(rs.getTimestamp("fahrtdatumzeit"));
+
+                result.add(search);
+            }
+
+        } catch (SQLException e) {
+            throw new StoreException(e);
+        }
+        return result;
+    }
 
     /**
      * a function to check whether a User has license or not (in order to check if he/she is allowed to make new drive)
