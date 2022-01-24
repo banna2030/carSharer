@@ -138,7 +138,7 @@ public final class DriveStore implements Closeable {
     public ArrayList<Drive> getSearchDrives(Drive search) throws StoreException {
         ArrayList<Drive> result = new ArrayList<>();
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT f.startort,f.zielort,f.fahrtkosten,f.fahrtdatumzeit, t.icon from dbp105.fahrt f INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid WHERE status = 'offen' AND f.startort = ? AND f.zielort =? AND f.fahrtdatumzeit >= ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT f.fid,f.startort,f.zielort,f.fahrtkosten,f.fahrtdatumzeit, t.icon from dbp105.fahrt f INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid WHERE status = 'offen' AND f.startort = ? AND f.zielort =? AND f.fahrtdatumzeit >= ?");
 
 
             ps.setString(1, search.getStartort());
@@ -153,8 +153,10 @@ public final class DriveStore implements Closeable {
                 search.setIcon(rs.getString("icon"));
                 search.setFahrtkosten(rs.getFloat("fahrtkosten"));
                 search.setFahrtdatumzeit(rs.getTimestamp("fahrtdatumzeit"));
+                search.setFID(rs.getInt("fid"));
 
                 result.add(search);
+                System.out.println(search.getStartort());
             }
 
         } catch (SQLException e) {

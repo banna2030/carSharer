@@ -54,7 +54,8 @@ public class ViewSearchServlet extends HttpServlet {
 
 
 
-         listOfSearchDrives =store.getSearchDrives(search);
+         listOfSearchDrives = store.getSearchDrives(search);
+        System.out.println(listOfSearchDrives.get(0).getStartort());
 
         req.setAttribute("searchDrive", listOfSearchDrives);
 
