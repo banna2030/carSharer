@@ -171,6 +171,18 @@ public class RatingStore implements Closeable {
             ps.setInt(1, user.getBID());
             ps.setInt(2, drive.getFID());
             ps.executeUpdate();
+
+            PreparedStatement ps2 = connection.prepareStatement("select status from dbp105.fahrt WHERE fid = ?");
+            ps2.setInt(1, drive.getFID());
+            ResultSet rs = ps2.executeQuery();
+            while (rs.next()){
+                drive.setStatus(rs.getString("status"));
+                if (drive.getStatus().equals("geschlossen")){
+                    PreparedStatement ps3 = connection.prepareStatement("update dbp105.fahrt set status = 'offen' WHERE fid = ?");
+                    ps3.setInt(1, drive.getFID());
+                    ps3.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
