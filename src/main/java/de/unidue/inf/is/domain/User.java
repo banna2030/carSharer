@@ -1,5 +1,9 @@
 package de.unidue.inf.is.domain;
-
+/**
+ * Domain class which stores all user information
+ *
+ * @autor Ahmed Omran
+ */
 public final class User {
 
     private String Name;
@@ -7,6 +11,10 @@ public final class User {
     private int BID;
     private int Anplätze;
 
+
+    public User() {
+        this.BID = 2;
+    }
 
     public int getAnplätze() {
         return Anplätze;
@@ -38,9 +46,5 @@ public final class User {
 
     public void setBID(int BID) {
         this.BID = BID;
-    }
-
-    public User() {
-        this.BID = 2;
     }
 }

@@ -16,12 +16,12 @@ import java.util.Date;
 
 public class ViewSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    ArrayList<Drive> listOfSearchDrives= new ArrayList<Drive>();
+    ArrayList<Drive> listOfSearchDrives = new ArrayList<Drive>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        req.setAttribute("searchDrive",listOfSearchDrives);
+        req.setAttribute("searchDrive", listOfSearchDrives);
         req.getRequestDispatcher("viewSearch.ftl").forward(req, resp);
         listOfSearchDrives.clear();
     }
@@ -30,29 +30,28 @@ public class ViewSearchServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         listOfSearchDrives.clear();
         String from = req.getParameter("from");
-        String to =req.getParameter("to");
-        String fahrtdatum =req.getParameter("Fahrtdatum");
+        String to = req.getParameter("to");
+        String fahrtdatum = req.getParameter("Fahrtdatum");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm"),
                 sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Date parse = null;
         try {
-            parse =  sdf.parse(fahrtdatum.replace("T", " "));
+            parse = sdf.parse(fahrtdatum.replace("T", " "));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Timestamp dateTime = Timestamp.valueOf(sdf2.format(parse));
 
-        System.out.println("--------------------------------------"+dateTime);
-        System.out.println(from + to+fahrtdatum);
+        System.out.println("--------------------------------------" + dateTime);
+        System.out.println(from + to + fahrtdatum);
 
         DriveStore store = new DriveStore();
 
-        Drive search= new Drive();
+        Drive search = new Drive();
         search.setStartort(from);
         search.setZielort(to);
         search.setFahrtdatumzeit(dateTime);
-
 
 
         listOfSearchDrives = store.getSearchDrives(search);

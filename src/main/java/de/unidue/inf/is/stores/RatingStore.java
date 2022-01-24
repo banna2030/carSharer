@@ -4,6 +4,7 @@ import de.unidue.inf.is.domain.Drive;
 import de.unidue.inf.is.domain.Rating;
 import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.utils.DBUtil;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
@@ -15,17 +16,18 @@ import java.util.ArrayList;
 public class RatingStore implements Closeable {
     /**
      * inserting new review to the database with the parameters passed from NewRatingServlet
+     *
      * @autor Team-work
      */
     //connection variables and functions
     private Connection connection;
     private boolean complete;
-    public RatingStore() throws StoreException{
+
+    public RatingStore() throws StoreException {
         try {
             connection = DBUtil.getExternalConnection();
             connection.setAutoCommit(false);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new StoreException(e);
         }
     }
@@ -40,19 +42,15 @@ public class RatingStore implements Closeable {
             try {
                 if (complete) {
                     connection.commit();
-                }
-                else {
+                } else {
                     connection.rollback();
                 }
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 throw new StoreException(e);
-            }
-            finally {
+            } finally {
                 try {
                     connection.close();
-                }
-                catch (SQLException e) {
+                } catch (SQLException e) {
                     throw new StoreException(e);
                 }
             }
@@ -63,23 +61,22 @@ public class RatingStore implements Closeable {
      * makes a new review "bewertung" and tries to link it to the current user and the drive (in table "screiben"
      * if the linking failed (happens if user has already reviewed the same drive before
      * the function deletes the made review from table "bewertung"
+     *
      * @returns true if adding and linking is successful, false otherwise
      * @autor Osama Elsafty
      */
-    public boolean sendReview(int bid, int fid, String review, int rating, String dateAndTime) throws RuntimeException{
-        final String sqlGetBEID="SELECT beid FROM dbp105.bewertung " +
+    public boolean sendReview(int bid, int fid, String review, int rating, String dateAndTime) throws RuntimeException {
+        final String sqlGetBEID = "SELECT beid FROM dbp105.bewertung " +
                 "WHERE textnachricht LIKE ? AND erstellungsdatum=? AND rating=?";
         // like is used for CLOB attributes
-        final String SqlInsertToSchreiben ="INSERT INTO dbp105.schreiben " +
+        final String SqlInsertToSchreiben = "INSERT INTO dbp105.schreiben " +
                 "(benutzer, fahrt, bewertung) VALUES (?,?,?)";
         final String SqlInsertToBewertung = "INSERT INTO dbp105.bewertung " +
                 "(textnachricht, erstellungsdatum, rating) VALUES " +
                 "(?,?,?)";
         final String sqlDeleteFromBewertung = "DELETE FROM dbp105.bewertung WHERE beid=?";
 
-//        System.out.println("recived values \n bid: "+bid + "\n fid: "+ fid + "\nreview: " + review + "\nrating: " + rating + "\ndate and time: "+ dateAndTime);
-
-        int beid=-1;
+        int beid = -1;
         try {
             PreparedStatement ps = connection.prepareStatement(SqlInsertToBewertung);
             //setting place holders
@@ -90,12 +87,12 @@ public class RatingStore implements Closeable {
             System.out.println("inserted to bewertung");
 
             //linking to the user and the drive
-               //getting the id of the the newly added review
+            //getting the id of the the newly added review
             PreparedStatement ps2 = connection.prepareStatement(sqlGetBEID);
             ps2.setString(1, review);
             ps2.setString(2, dateAndTime);
             ps2.setInt(3, rating);
-            ResultSet rs2= ps2.executeQuery();
+            ResultSet rs2 = ps2.executeQuery();
 
             if (rs2.next()) {
                 beid = rs2.getInt("beid");
@@ -105,10 +102,10 @@ public class RatingStore implements Closeable {
 
             //saving to table "schreiben"
             PreparedStatement ps3 = connection.prepareStatement(SqlInsertToSchreiben);
-            ps3.setInt(1,bid);
-            ps3.setInt(2,fid);
-            ps3.setInt(3,beid);
-            System.out.println("BID: "+ bid + "\nfid" + fid + "\nbeid"+ beid);
+            ps3.setInt(1, bid);
+            ps3.setInt(2, fid);
+            ps3.setInt(3, beid);
+            System.out.println("BID: " + bid + "\nfid" + fid + "\nbeid" + beid);
             ps3.executeUpdate();
             System.out.println("inserted to schreiben");
             return true;
@@ -130,6 +127,12 @@ public class RatingStore implements Closeable {
         }
     }
 
+    /**
+     * Fetches the database to get all ratings for specific drive.
+     *
+     * @returns array of type object ratings
+     * @autor Ahmed Omran
+     */
     public ArrayList<Rating> getDriveRatings(Drive drive) throws StoreException {
         ArrayList<Rating> result = new ArrayList<>();
         try {
@@ -149,7 +152,13 @@ public class RatingStore implements Closeable {
         return result;
     }
 
-    public boolean bookDrive(User user, Drive drive) throws RuntimeException{
+    /**
+     * Inserts a new booking in the database
+     *
+     * @returns true if the booking is saved successfully in the database, otherwise false
+     * @autor Ahmed Omran
+     */
+    public boolean bookDrive(User user, Drive drive) throws RuntimeException {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO dbp105.reservieren (kunde, fahrt, anzPlaetze) VALUES (?, ?, ?)");
             //setting place holders
@@ -164,7 +173,13 @@ public class RatingStore implements Closeable {
         return true;
     }
 
-    public boolean deleteBooking(User user, Drive drive) throws RuntimeException{
+    /**
+     * Deletes an existing booking in the database
+     *
+     * @returns true if the booking is deleted successfully from the database, otherwise false
+     * @autor Ahmed Omran
+     */
+    public boolean deleteBooking(User user, Drive drive) throws RuntimeException {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM dbp105.reservieren WHERE kunde = ? AND fahrt = ?");
             //setting place holders
@@ -175,9 +190,9 @@ public class RatingStore implements Closeable {
             PreparedStatement ps2 = connection.prepareStatement("select status from dbp105.fahrt WHERE fid = ?");
             ps2.setInt(1, drive.getFID());
             ResultSet rs = ps2.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 drive.setStatus(rs.getString("status"));
-                if (drive.getStatus().equals("geschlossen")){
+                if (drive.getStatus().equals("geschlossen")) {
                     PreparedStatement ps3 = connection.prepareStatement("update dbp105.fahrt set status = 'offen' WHERE fid = ?");
                     ps3.setInt(1, drive.getFID());
                     ps3.executeUpdate();
@@ -190,16 +205,22 @@ public class RatingStore implements Closeable {
         return true;
     }
 
-    public Float getAverageRating(Drive drive) throws RuntimeException{
+    /**
+     * Gets the average rating number for specific trip
+     *
+     * @returns average float number
+     * @autor Ahmed Omran
+     */
+    public Float getAverageRating(Drive drive) throws RuntimeException {
         float avgRating = 0;
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement("select CAST(AVG(CAST(Rating AS DECIMAL(10,2))) AS DECIMAL(10,2)) from dbp105.schreiben s INNER JOIN dbp105.bewertung b ON s.bewertung = b.beid WHERE s.fahrt = ? GROUP BY fahrt");
             ps.setInt(1, drive.getFID());
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 avgRating = rs.getFloat(1);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }

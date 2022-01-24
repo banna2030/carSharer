@@ -1,5 +1,9 @@
 package de.unidue.inf.is.domain;
-
+/**
+ * Domain class which stores all ratings information
+ *
+ * @autor Ahmed Omran
+ */
 public class Rating {
     private int FID;
     private int Rating;

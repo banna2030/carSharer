@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <title>Hauptseite</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <style>
         td, th {
             border: 1px solid #dddddd;
@@ -13,12 +14,15 @@
         tr:nth-child(even) {
             background-color: #dddddd;
         }
-        body{
+
+        body {
             background: #eee;
         }
-        .container{
+
+        .container {
             max-width: 800px;
         }
+
         .error {
             font-size: 15px;
             color: red;

@@ -17,7 +17,8 @@
             <tbody>
             <#list reservedDrive as rd>
                 <tr onclick="window.location='view_drive?FID=${rd.getFID()}';">
-                    <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${rd.getIcon()}; alt="Card image cap"></td>
+                    <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${rd.getIcon()};
+                             alt="Card image cap"></td>
                     <td>${rd.getStartort()}</td>
                     <td>${rd.getZielort()}</td>
                     <td>${rd.getStatus()}</td>
@@ -46,7 +47,8 @@
             <tbody>
             <#list openDrive as od>
                 <tr onclick="window.location='view_drive?FID=${od.getFID()}';">
-                    <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${od.getIcon()}; alt="Card image cap"></td>
+                    <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${od.getIcon()};
+                             alt="Card image cap"></td>
                     <td>${od.getStartort()}</td>
                     <td>${od.getZielort()}</td>
                     <td>${od.getFreiplätze()}</td>
@@ -56,7 +58,8 @@
             </tbody>
         </table>
     </div>
-    <button type="button" onclick="location.href='new_drive';" class="btn btn-primary d-block mb-2">Fahrt Erstellen</button>
+    <button type="button" onclick="location.href='new_drive';" class="btn btn-primary d-block mb-2">Fahrt Erstellen
+    </button>
 </div>
 
 <#include "footer.ftl">

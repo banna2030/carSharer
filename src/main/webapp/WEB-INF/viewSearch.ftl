@@ -7,7 +7,7 @@
             <div class="form-group row mb-2">
                 <label for="from" class="col-sm-3 col-form-label">Start:</label>
                 <div class="col-sm-9">
-                    <input name="from"type="text" id="from" class="form-control">
+                    <input name="from" type="text" id="from" class="form-control">
                 </div>
             </div>
             <div class="form-group row mb-2">
@@ -42,16 +42,17 @@
                 <th scope="col">Preis</th>
             </tr>
             </thead>
-             <tbody>
-             <#list searchDrive as od>
-                 <tr onclick="window.location='view_drive?FID=${od.getFID()}';">
-                     <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${od.getIcon()}; alt="Card image cap"></td>
-                     <td>${od.getStartort()}</td>
-                     <td>${od.getZielort()}</td>
-                     <td>${od.getFahrtkosten()}</td>
-                 </tr>
-             </#list>
-             </tbody>
+            <tbody>
+            <#list searchDrive as od>
+                <tr onclick="window.location='view_drive?FID=${od.getFID()}';">
+                    <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${od.getIcon()};
+                             alt="Card image cap"></td>
+                    <td>${od.getStartort()}</td>
+                    <td>${od.getZielort()}</td>
+                    <td>${od.getFahrtkosten()}</td>
+                </tr>
+            </#list>
+            </tbody>
         </table>
     </div>
 

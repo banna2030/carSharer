@@ -8,7 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
+/**
+ * Domain class which stores all trip information
+ *
+ * @autor Ahmed Omran
+ */
 public final class Drive {
     private int FID;
     private int BID;
@@ -25,6 +29,9 @@ public final class Drive {
     private String Beschreibung;
     private int transportmittel;
 
+    public Drive() {
+    }
+
     public String getAnbieter() {
         return Anbieter;
     }
@@ -38,9 +45,9 @@ public final class Drive {
     }
 
     public void setBeschreibung(String beschreibung) {
-        if (beschreibung == null){
+        if (beschreibung == null) {
             Beschreibung = "Keine Beschreibung";
-        }else {
+        } else {
             Beschreibung = beschreibung;
         }
     }
@@ -93,46 +100,44 @@ public final class Drive {
         Maxplätze = maxplätze;
     }
 
-    public Drive(){}
+    public int getFID() {
+        return FID;
+    }
 
     public void setFID(int FID) {
         this.FID = FID;
-    }
-
-    public void setFahrtkosten(float fahrtkosten) {
-        Fahrtkosten = fahrtkosten;
-    }
-
-    public void setStartort(String startort) {
-        Startort = startort;
-    }
-
-    public void setZielort(String zielort) {
-        Zielort = zielort;
-    }
-
-    public void setStatus(String status) {
-        Status = status;
-    }
-
-    public int getFID() {
-        return FID;
     }
 
     public float getFahrtkosten() {
         return Fahrtkosten;
     }
 
+    public void setFahrtkosten(float fahrtkosten) {
+        Fahrtkosten = fahrtkosten;
+    }
+
     public String getStartort() {
         return Startort;
+    }
+
+    public void setStartort(String startort) {
+        Startort = startort;
     }
 
     public String getZielort() {
         return Zielort;
     }
 
+    public void setZielort(String zielort) {
+        Zielort = zielort;
+    }
+
     public String getStatus() {
         return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 
     @Override

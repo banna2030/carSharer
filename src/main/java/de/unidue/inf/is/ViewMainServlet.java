@@ -11,6 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Servlet of the view_main page which shows all the open trips also the reserved trips for
+ * our internal logged in user
+ *
+ * @autor Ahmed Omran
+ */
 public class ViewMainServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -25,8 +31,8 @@ public class ViewMainServlet extends HttpServlet {
         //listOfReservedDrives.stream().forEach(System.out::println);
         drive.complete();
         drive.close();
-       req.setAttribute("reservedDrive", listOfReservedDrives);
+        req.setAttribute("reservedDrive", listOfReservedDrives);
         req.setAttribute("openDrive", listOfOpenDrives);
-       req.getRequestDispatcher("/viewMain.ftl").forward(req, resp);
+        req.getRequestDispatcher("/viewMain.ftl").forward(req, resp);
     }
 }

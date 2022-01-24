@@ -27,12 +27,12 @@ public class BestDriverServlet extends HttpServlet {
         userStore.close();
         //setting best driver data
         req.setAttribute("driverName", bestDriver.getName());
-        req.setAttribute("averageRating", String.format("%.2f",averageRating));
+        req.setAttribute("averageRating", String.format("%.2f", averageRating));
 
         //setting his open drives
         DriveStore driveStore = new DriveStore();
         ArrayList<Drive> listOfBestDriverOpenDrives;
-        listOfBestDriverOpenDrives= driveStore.getOpenDrives(bestDriver);
+        listOfBestDriverOpenDrives = driveStore.getOpenDrives(bestDriver);
         req.setAttribute("bestDriverOpenDrives", listOfBestDriverOpenDrives);
         driveStore.complete();
         driveStore.close();

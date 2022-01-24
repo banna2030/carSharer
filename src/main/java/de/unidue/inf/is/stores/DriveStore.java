@@ -17,16 +17,21 @@ public final class DriveStore implements Closeable {
     private Connection connection;
     private boolean complete;
 
-    public DriveStore() throws StoreException{
+    public DriveStore() throws StoreException {
         try {
             connection = DBUtil.getExternalConnection();
             connection.setAutoCommit(false);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new StoreException(e);
         }
     }
 
+    /**
+     * Gets all the open trips exist in the database
+     *
+     * @returns Arraylist of type Drive object
+     * @autor Ahmed Omran
+     */
     public ArrayList<Drive> getOpenDrives() throws StoreException {
         ArrayList<Drive> result = new ArrayList<>();
         String sqlQuery = "select f.fid, f.startort, f.zielort, f.fahrtkosten, f.maxPlaetze - CASE WHEN EXISTS(select anzPlaetze from dbp105.reservieren WHERE fahrt = f.fid) THEN sum(r.anzPlaetze) ELSE 0 END as freiplätze, t.icon \n" +
@@ -54,6 +59,12 @@ public final class DriveStore implements Closeable {
         return result;
     }
 
+    /**
+     * Gets all the reserved trips exist in the database
+     *
+     * @returns Arraylist of type Drive object
+     * @autor Ahmed Omran
+     */
     public ArrayList<Drive> getReservedDrives() throws StoreException {
         ArrayList<Drive> result = new ArrayList<>();
         User usr = new User();
@@ -79,6 +90,12 @@ public final class DriveStore implements Closeable {
         return result;
     }
 
+    /**
+     * Gets all the information about specific trip exists in the database
+     *
+     * @returns object of type Drive
+     * @autor Ahmed Omran
+     */
     public Drive getDriveInformation(Drive drive) throws StoreException {
 
         String sqlQuery = "select b.name, f.fahrtdatumzeit, f.startort, f.zielort,f.maxPlaetze - CASE WHEN EXISTS(select anzPlaetze from dbp105.reservieren WHERE fahrt = ?) THEN sum(r.anzPlaetze) ELSE 0 END as freiplätze, f.fahrtkosten, t.icon, f.status \n" +
@@ -104,7 +121,7 @@ public final class DriveStore implements Closeable {
                 drive.setFreiplätze(rs.getInt("freiplätze"));
                 drive.setAnbieter(rs.getString("name"));
             }
-            while (r2.next()){
+            while (r2.next()) {
                 drive.setBeschreibung(r2.getString(1));
             }
         } catch (SQLException e) {
@@ -113,19 +130,19 @@ public final class DriveStore implements Closeable {
         return drive;
     }
 
-    public void storeNewDrive(Drive newDrive) throws StoreException{
+    public void storeNewDrive(Drive newDrive) throws StoreException {
         User user = new User();
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO dbp105.fahrt (startort,zielort,fahrtdatumzeit,maxPlaetze,fahrtkosten,anbieter,transportmittel,beschreibung) VALUES (?,?,?,?,?,?,?,?)");
 
-            ps.setString(1,newDrive.getStartort());
-            ps.setString(2,newDrive.getZielort());
-            ps.setTimestamp(3,newDrive.getFahrtdatumzeit());
-            ps.setInt(4,newDrive.getMaxplätze());
-            ps.setFloat(5,newDrive.getFahrtkosten());
-            ps.setInt(7,newDrive.getTransportmittel());
-            ps.setString(8,newDrive.getBeschreibung());
-            ps.setInt(6,user.getBID());
+            ps.setString(1, newDrive.getStartort());
+            ps.setString(2, newDrive.getZielort());
+            ps.setTimestamp(3, newDrive.getFahrtdatumzeit());
+            ps.setInt(4, newDrive.getMaxplätze());
+            ps.setFloat(5, newDrive.getFahrtkosten());
+            ps.setInt(7, newDrive.getTransportmittel());
+            ps.setString(8, newDrive.getBeschreibung());
+            ps.setInt(6, user.getBID());
             ps.executeUpdate();
 
             System.out.println(newDrive.getFahrtkosten());
@@ -135,6 +152,7 @@ public final class DriveStore implements Closeable {
         }
 
     }
+
     public ArrayList<Drive> getSearchDrives(Drive search) throws StoreException {
         ArrayList<Drive> result = new ArrayList<>();
         try {
@@ -142,8 +160,8 @@ public final class DriveStore implements Closeable {
 
 
             ps.setString(1, search.getStartort());
-            ps.setString(2,search.getZielort());
-            ps.setTimestamp(3,search.getFahrtdatumzeit());
+            ps.setString(2, search.getZielort());
+            ps.setTimestamp(3, search.getFahrtdatumzeit());
 
             ResultSet rs = ps.executeQuery();
 
@@ -169,6 +187,7 @@ public final class DriveStore implements Closeable {
      * a function to check whether a User has license or not (in order to check if he/she is allowed to make new drive)
      * the function checks also if the existing license of that user will be valid on the date that he is trying
      * to make a drive on
+     *
      * @return true for valid license on the wanted date, false otherwise
      * @autor Osama Elsafty
      */
@@ -176,17 +195,17 @@ public final class DriveStore implements Closeable {
         User user = new User();
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp105.fahrerlaubnis WHERE fahrer=?");
-            ps.setInt(1,user.getBID());
-            ResultSet rs= ps.executeQuery();
+            ps.setInt(1, user.getBID());
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                if (rs.getString("ablaufdatum").compareTo(String.valueOf(newDrive.getFahrtdatumzeit()))>0) {
+                if (rs.getString("ablaufdatum").compareTo(String.valueOf(newDrive.getFahrtdatumzeit())) > 0) {
                     System.out.println("License ends on: " + rs.getString("ablaufdatum"));
-                    System.out.println("Drive date: "+ String.valueOf(newDrive.getFahrtdatumzeit()));
+                    System.out.println("Drive date: " + String.valueOf(newDrive.getFahrtdatumzeit()));
                     return true;
                 }
 
             }
-                return false;
+            return false;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
@@ -195,6 +214,7 @@ public final class DriveStore implements Closeable {
 
     /**
      * a finction that brings the open drives of a specific given user
+     *
      * @return Array of drives
      * @autors Osama Elsafty, Ahmed Omran
      */
@@ -203,7 +223,7 @@ public final class DriveStore implements Closeable {
         ArrayList<Drive> result = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sqlGetUserOpenDrives);
-            ps.setInt(1,driver.getBID());
+            ps.setInt(1, driver.getBID());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Drive drive = new Drive();
@@ -232,19 +252,15 @@ public final class DriveStore implements Closeable {
             try {
                 if (complete) {
                     connection.commit();
-                }
-                else {
+                } else {
                     connection.rollback();
                 }
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 throw new StoreException(e);
-            }
-            finally {
+            } finally {
                 try {
                     connection.close();
-                }
-                catch (SQLException e) {
+                } catch (SQLException e) {
                     throw new StoreException(e);
                 }
             }

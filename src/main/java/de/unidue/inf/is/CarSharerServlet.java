@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import de.unidue.inf.is.utils.DBUtil;
 
 
-
 /**
  * Das könnte die Eintrittsseite sein.
  */
@@ -21,14 +20,13 @@ public final class CarSharerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-                    throws ServletException, IOException {
-  
+            throws ServletException, IOException {
+
         boolean databaseExists = DBUtil.checkDatabaseExistsExternal();
 
         if (databaseExists) {
             request.setAttribute("db2exists", "vorhanden! Supi!");
-        }
-        else {
+        } else {
             request.setAttribute("db2exists", "nicht vorhanden :-(");
         }
 
