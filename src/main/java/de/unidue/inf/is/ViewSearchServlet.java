@@ -22,12 +22,13 @@ public class ViewSearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         req.setAttribute("searchDrive",listOfSearchDrives);
-
         req.getRequestDispatcher("viewSearch.ftl").forward(req, resp);
+        listOfSearchDrives.clear();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        listOfSearchDrives.clear();
         String from = req.getParameter("from");
         String to =req.getParameter("to");
         String fahrtdatum =req.getParameter("Fahrtdatum");
@@ -54,10 +55,10 @@ public class ViewSearchServlet extends HttpServlet {
 
 
 
-         listOfSearchDrives = store.getSearchDrives(search);
+        listOfSearchDrives = store.getSearchDrives(search);
         System.out.println(listOfSearchDrives.get(0).getStartort());
 
-        req.setAttribute("searchDrive", listOfSearchDrives);
+        //req.setAttribute("searchDrive", listOfSearchDrives);
 
         store.complete();
         store.close();

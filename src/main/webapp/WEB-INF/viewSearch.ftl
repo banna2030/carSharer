@@ -43,17 +43,15 @@
             </tr>
             </thead>
              <tbody>
-                        <#list searchDrive as od>
-                                                    <tr onclick="window.location='view_drive?FID=${od.getFID()}';">
-                                                        <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${od.getIcon()}; alt="Card image cap"></td>
-                                                        <td>${od.getStartort()}</td>
-                                                        <td>${od.getZielort()}</td>
-                                                        <td>${od.getFahrtkosten()}</td>
-                                                    </tr>
-                                                </#list>
-                       </tbody>
-
-
+             <#list searchDrive as od>
+                 <tr onclick="window.location='view_drive?FID=${od.getFID()}';">
+                     <td><img class="rounded-circle" alt="Driver" style="width: 50px; height: 50px" src=${od.getIcon()}; alt="Card image cap"></td>
+                     <td>${od.getStartort()}</td>
+                     <td>${od.getZielort()}</td>
+                     <td>${od.getFahrtkosten()}</td>
+                 </tr>
+             </#list>
+             </tbody>
         </table>
     </div>
 
