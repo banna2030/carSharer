@@ -1,6 +1,7 @@
 package de.unidue.inf.is.stores;
 
 import de.unidue.inf.is.domain.Drive;
+import de.unidue.inf.is.domain.Rating;
 import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.utils.DBUtil;
 
@@ -99,11 +100,11 @@ public final class DriveStore implements Closeable {
      */
     public Drive getDriveInformation(Drive drive) throws StoreException {
 
-        String sqlQuery = "select b.name, f.fahrtdatumzeit, f.startort, f.zielort,f.maxPlaetze - CASE WHEN EXISTS(select anzPlaetze from dbp105.reservieren WHERE fahrt = ?) THEN sum(r.anzPlaetze) ELSE 0 END as freiplätze, f.fahrtkosten, t.icon, f.status \n" +
+        String sqlQuery = "select b.name, b.bid, f.fahrtdatumzeit, f.startort, f.zielort,f.maxPlaetze - CASE WHEN EXISTS(select anzPlaetze from dbp105.reservieren WHERE fahrt = ?) THEN sum(r.anzPlaetze) ELSE 0 END as freiplätze, f.fahrtkosten, t.icon, f.status \n" +
                 "from dbp105.fahrt f LEFT JOIN dbp105.reservieren r ON f.fid = r.fahrt\n" +
                 "INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid \n" +
                 "INNER JOIN dbp105.benutzer b ON b.bid = f.anbieter WHERE fid = ? \n" +
-                "GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten, t.icon, f.status, b.name, f.fahrtdatumzeit";
+                "GROUP BY f.startort, f.zielort, f.fid, f.maxPlaetze, f.fahrtkosten, t.icon, f.status, b.name, b.bid, f.fahrtdatumzeit";
         try {
             PreparedStatement ps = connection.prepareStatement(sqlQuery);
             PreparedStatement ps2 = connection.prepareStatement("select f.beschreibung from dbp105.fahrt f WHERE f.fid = ?");
@@ -121,6 +122,7 @@ public final class DriveStore implements Closeable {
                 drive.setFahrtdatumzeit(rs.getTimestamp("fahrtdatumzeit"));
                 drive.setFreiplätze(rs.getInt("freiplätze"));
                 drive.setAnbieter(rs.getString("name"));
+                drive.setBID(rs.getInt("bid"));
             }
             while (r2.next()) {
                 drive.setBeschreibung(r2.getString(1));
@@ -250,6 +252,33 @@ public final class DriveStore implements Closeable {
             throwables.printStackTrace();
         }
         return result;
+    }
+
+    public boolean deleteDrive(User user, Drive drive) throws RuntimeException {
+        RatingStore ratingStore = new RatingStore();
+        ArrayList<Rating> listOfRatingsIDs = ratingStore.getDriveRatings(drive);
+        try {
+            try(PreparedStatement ps = connection.prepareStatement("DELETE FROM dbp105.reservieren WHERE fahrt = ?")){
+                //setting place holderss
+                ps.setInt(1, drive.getFID());
+                ps.executeUpdate();
+            }try(PreparedStatement ps3 = connection.prepareStatement("DELETE FROM dbp105.schreiben s WHERE s.fahrt = ?")){
+                ps3.setInt(1, drive.getFID());
+                ps3.executeUpdate();
+            }try(PreparedStatement ps2 = connection.prepareStatement("DELETE FROM dbp105.fahrt WHERE fid = ?")){
+                ps2.setInt(1, drive.getFID());
+                ps2.executeUpdate();
+            }
+            for (Rating rate: listOfRatingsIDs) {
+                PreparedStatement ps4 = connection.prepareStatement("DELETE FROM dbp105.bewertung b WHERE b.beid = ?");
+                ps4.setInt(1, rate.getBEID());
+                ps4.executeUpdate();}
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public void complete() {

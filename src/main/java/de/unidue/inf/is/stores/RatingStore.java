@@ -144,6 +144,7 @@ public class RatingStore implements Closeable {
                 rating.setTextnachricht(rs.getString("textnachricht"));
                 rating.setErstellungsdatum(rs.getString("erstellungsdatum"));
                 rating.setRating(rs.getInt("rating"));
+                rating.setBEID(rs.getInt("beid"));
                 result.add(rating);
             }
         } catch (SQLException e) {
@@ -204,6 +205,8 @@ public class RatingStore implements Closeable {
         }
         return true;
     }
+
+
 
     /**
      * Gets the average rating number for specific trip

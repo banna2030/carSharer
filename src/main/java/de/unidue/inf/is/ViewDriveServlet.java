@@ -60,15 +60,21 @@ public class ViewDriveServlet extends HttpServlet {
         String queryString = req.getQueryString();
         RatingStore ratingStore = new RatingStore();
         DriveStore driveStore = new DriveStore();
-        Timestamp currentDateTime = Timestamp.valueOf(new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime()));
+        Timestamp currentDateTime = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()));
         System.out.println(currentDateTime);
 
         drive.setFID(Integer.parseInt(req.getParameter("FID").replaceAll("\\D+", "")));
 
 
         if (queryString.substring(queryString.lastIndexOf("=") + 1).equals("delete")) {
-            if (ratingStore.deleteBooking(user, drive)) {
-                MessageServlet messageServlet = new MessageServlet("Die Buchung ist erfolgreich gelöscht worden!", "Erfolgreich gelöscht", true);
+            if(driveStore.getDriveInformation(drive).getBID() != user.getBID()){
+                MessageServlet messageServlet = new MessageServlet("Nur der Reiseanbieter kann sie löschen", "Fahler", false);
+                messageServlet.doGet(req, resp);
+            }
+            if (driveStore.deleteDrive(user, drive)) {
+                driveStore.complete();
+                driveStore.close();
+                MessageServlet messageServlet = new MessageServlet("Die Reise ist erfolgreich gelöscht worden!", "Erfolgreich gelöscht", true);
                 messageServlet.doGet(req, resp);
             } else {
                 MessageServlet messageServlet = new MessageServlet("Ungebuchte Reise kann nicht gelöscht werden!", "Fehler", false);

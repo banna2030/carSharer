@@ -6,6 +6,7 @@ package de.unidue.inf.is.domain;
  */
 public class Rating {
     private int FID;
+    private int BEID;
     private int Rating;
     private String textnachricht;
     private String erstellungsdatum;
@@ -40,5 +41,13 @@ public class Rating {
 
     public void setErstellungsdatum(String erstellungsdatum) {
         this.erstellungsdatum = erstellungsdatum;
+    }
+
+    public int getBEID() {
+        return BEID;
+    }
+
+    public void setBEID(int BEID) {
+        this.BEID = BEID;
     }
 }
