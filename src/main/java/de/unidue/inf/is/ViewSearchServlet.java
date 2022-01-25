@@ -1,5 +1,6 @@
 package de.unidue.inf.is;
 
+import com.sun.org.apache.bcel.internal.generic.InstructionListObserver;
 import de.unidue.inf.is.domain.Drive;
 import de.unidue.inf.is.stores.DriveStore;
 
@@ -13,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ViewSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -28,7 +30,9 @@ public class ViewSearchServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         listOfSearchDrives.clear();
+
         String from = req.getParameter("from");
         String to = req.getParameter("to");
         String fahrtdatum = req.getParameter("Fahrtdatum");
@@ -53,9 +57,26 @@ public class ViewSearchServlet extends HttpServlet {
         search.setZielort(to);
         search.setFahrtdatumzeit(dateTime);
 
+        if(from==""|| to==""){
+            try {
+                MessageServlet messageServlet = new MessageServlet("Bitte Start- oder Zielort eingeben!", "Leer Textuelle", false);
+                messageServlet.doGet(req, resp);
+            }
+            catch (ServletException|IOException e){ e.printStackTrace();}
+        }else
 
-        listOfSearchDrives = store.getSearchDrives(search);
+            listOfSearchDrives = store.getSearchDrives(search);
+
+
+        while (listOfSearchDrives.size()==0){
+            try {
+                MessageServlet messageServlet = new MessageServlet("Es gibt keine Ergebnisse! versuch noch mal!", "keinen Ergebnissen", false);
+                messageServlet.doGet(req, resp);
+            }
+            catch (ServletException|IOException e){ e.printStackTrace();}
+        }
         System.out.println(listOfSearchDrives.get(0).getStartort());
+
 
         //req.setAttribute("searchDrive", listOfSearchDrives);
 

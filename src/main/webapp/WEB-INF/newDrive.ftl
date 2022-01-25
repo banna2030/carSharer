@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="form-group row mb-2">
-                <label for="cost" class="col-sm-3 col-form-label">Fahrtkosten:</label>
+                <label for="cost" class="col-sm-3 col-form-label">Fahrtkosten (€):</label>
                 <div class="col-sm-9">
                     <input name="cost" type="number" min="1" id="cost" class="form-control">
                 </div>
@@ -63,7 +63,7 @@
             <div class="form-group row mb-2">
                 <label for="Beschreibung" class="col-sm-3 col-form-label">Beschreibung:</label>
                 <div class="col-sm-9">
-                    <input type="text" id="Beschreibung" name="description" class="form-control">
+                    <input type="text" id="Beschreibung" name="description" maxlength = "50" class="form-control">
                 </div>
             </div>
             <button type="submit" class="btn btn-primary d-block mb-2 float-end">Erstellen</button>

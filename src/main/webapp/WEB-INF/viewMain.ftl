@@ -52,7 +52,7 @@
                     <td>${od.getStartort()}</td>
                     <td>${od.getZielort()}</td>
                     <td>${od.getFreiplätze()}</td>
-                    <td>${od.getFahrtkosten()}</td>
+                    <td>${od.getFahrtkosten()+'€'}</td>
                 </tr>
             </#list>
             </tbody>

@@ -49,7 +49,7 @@
                              alt="Card image cap"></td>
                     <td>${od.getStartort()}</td>
                     <td>${od.getZielort()}</td>
-                    <td>${od.getFahrtkosten()}</td>
+                    <td>${od.getFahrtkosten()+'€'}</td>
                 </tr>
             </#list>
             </tbody>
