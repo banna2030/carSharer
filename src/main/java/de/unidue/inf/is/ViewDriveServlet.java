@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 /**
@@ -57,6 +60,8 @@ public class ViewDriveServlet extends HttpServlet {
         String queryString = req.getQueryString();
         RatingStore ratingStore = new RatingStore();
         DriveStore driveStore = new DriveStore();
+        Timestamp currentDateTime = Timestamp.valueOf(new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime()));
+        System.out.println(currentDateTime);
 
         drive.setFID(Integer.parseInt(req.getParameter("FID").replaceAll("\\D+", "")));
 
@@ -72,21 +77,34 @@ public class ViewDriveServlet extends HttpServlet {
             ratingStore.complete();
             ratingStore.close();
             doGet(req, resp);
+
         } else if (queryString.substring(queryString.lastIndexOf("=") + 1).equals("book")) {
+
             user.setAnplätze(Integer.parseInt(req.getParameter("anPlätze")));
             drive = driveStore.getDriveInformation(drive);
+
             if (drive.getFreiplätze() < user.getAnplätze()) {
                 MessageServlet messageServlet = new MessageServlet("Es gibt nicht genügend Plätze zu buchen!", "Fehler", false);
                 messageServlet.doGet(req, resp);
-            } else {
+
+            }else if(currentDateTime.after(drive.getFahrtdatumzeit())){
+                MessageServlet messageServlet = new MessageServlet("Die Reise ist schon vorbei", "Fehler", false);
+                messageServlet.doGet(req, resp);
+            }
+            else {
                 if (ratingStore.bookDrive(user, drive)) {
+
                     MessageServlet messageServlet = new MessageServlet("Die Reise ist erfolgreich gebucht worden!", "Erfolgreich gebucht", true);
                     messageServlet.doGet(req, resp);
+
                 } else {
+
                     MessageServlet messageServlet = new MessageServlet("Die Reise ist bereit gebucht!", "Fehler", false);
                     messageServlet.doGet(req, resp);
+
                 }
             }
+
             ratingStore.complete();
             ratingStore.close();
             doGet(req, resp);

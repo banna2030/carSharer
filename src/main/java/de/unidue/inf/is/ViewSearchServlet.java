@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -57,28 +58,28 @@ public class ViewSearchServlet extends HttpServlet {
         search.setZielort(to);
         search.setFahrtdatumzeit(dateTime);
 
-        if(from==""|| to==""){
+        if (from == "" || to == "") {
             try {
                 MessageServlet messageServlet = new MessageServlet("Bitte Start- oder Zielort eingeben!", "Leer Textuelle", false);
                 messageServlet.doGet(req, resp);
+            } catch (ServletException | IOException e) {
+                e.printStackTrace();
             }
-            catch (ServletException|IOException e){ e.printStackTrace();}
-        }else
+        } else
 
             listOfSearchDrives = store.getSearchDrives(search);
 
 
-        while (listOfSearchDrives.size()==0){
+        while (listOfSearchDrives.size() == 0) {
             try {
                 MessageServlet messageServlet = new MessageServlet("Es gibt keine Ergebnisse! versuch noch mal!", "keinen Ergebnissen", false);
                 messageServlet.doGet(req, resp);
+            } catch (ServletException | IOException e) {
+                e.printStackTrace();
             }
-            catch (ServletException|IOException e){ e.printStackTrace();}
         }
         System.out.println(listOfSearchDrives.get(0).getStartort());
 
-
-        //req.setAttribute("searchDrive", listOfSearchDrives);
 
         store.complete();
         store.close();

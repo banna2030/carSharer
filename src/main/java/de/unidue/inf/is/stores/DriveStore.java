@@ -6,13 +6,12 @@ import de.unidue.inf.is.utils.DBUtil;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public final class DriveStore implements Closeable {
@@ -161,7 +160,6 @@ public final class DriveStore implements Closeable {
             PreparedStatement ps = connection.prepareStatement("SELECT f.fid,f.startort,f.zielort,f.fahrtkosten,f.fahrtdatumzeit, t.icon from dbp105.fahrt f INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid WHERE status = 'offen' AND UPPER(f.startort) like '%' || UPPER(?) || '%' AND UPPER(f.zielort) like '%' || UPPER(?) || '%'  AND f.fahrtdatumzeit >= ?");
 
 
-
             ps.setString(1, search.getStartort());
             ps.setString(2, search.getZielort());
             ps.setTimestamp(3, search.getFahrtdatumzeit());
@@ -214,30 +212,16 @@ public final class DriveStore implements Closeable {
             return false;
         }
     }
+
     public boolean checkForDate(Drive newDrive) {
         User user = new User();
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp105.fahrt WHERE fahrtdatumzeit=?");
-            ps.setTimestamp(1, newDrive.getFahrtdatumzeit());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                if (rs.getString("fahrtdatumzeit").compareTo(String.valueOf(getCurrentDateAndTime())) > 0) {
-
-                    return true;
-                }
-
-            }
-            return false;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        Timestamp currentDateTime = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()));
+        if (newDrive.getFahrtdatumzeit().before(currentDateTime)) {
             return false;
         }
+        return true;
     }
-    private String getCurrentDateAndTime() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss.000000");
-        LocalDateTime now = LocalDateTime.now();
-        return dtf.format(now);
-    }
+
     /**
      * a finction that brings the open drives of a specific given user
      *
