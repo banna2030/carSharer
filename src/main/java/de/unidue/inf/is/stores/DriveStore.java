@@ -161,23 +161,27 @@ public final class DriveStore implements Closeable {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT f.fid,f.startort,f.zielort,f.fahrtkosten,f.fahrtdatumzeit, t.icon from dbp105.fahrt f INNER JOIN dbp105.transportmittel t ON f.transportmittel = t.tid WHERE status = 'offen' AND UPPER(f.startort) like '%' || UPPER(?) || '%' AND UPPER(f.zielort) like '%' || UPPER(?) || '%'  AND f.fahrtdatumzeit >= ?");
 
-
             ps.setString(1, search.getStartort());
             ps.setString(2, search.getZielort());
             ps.setTimestamp(3, search.getFahrtdatumzeit());
-
+//            System.out.println("from store... \nstart: "+ search.getStartort() + "\nziel: "+ search.getZielort() + "\ndate: "+ search.getFahrtdatumzeit());
             ResultSet rs = ps.executeQuery();
-
+            System.out.println("RESULTS>>>>>>>>>>>>>>>>>>");
             while (rs.next()) {
-                search.setStartort(rs.getString("startort"));
-                search.setZielort(rs.getString("zielort"));
-                search.setIcon(rs.getString("icon"));
-                search.setFahrtkosten(rs.getFloat("fahrtkosten"));
-                search.setFahrtdatumzeit(rs.getTimestamp("fahrtdatumzeit"));
-                search.setFID(rs.getInt("fid"));
+                Drive resultDrive = new Drive();
+                resultDrive.setStartort(rs.getString("startort"));
+                resultDrive.setZielort(rs.getString("zielort"));
+                resultDrive.setIcon(rs.getString("icon"));
+                resultDrive.setFahrtkosten(rs.getFloat("fahrtkosten"));
+                resultDrive.setFahrtdatumzeit(rs.getTimestamp("fahrtdatumzeit"));
+                resultDrive.setFID(rs.getInt("fid"));
+                System.out.println(search.getStartort()+ "..."+ search.getZielort() + "////////////");
 
-                result.add(search);
-                System.out.println(search.getStartort());
+                result.add(resultDrive);
+            }
+            for (Drive r:result){
+                System.out.println("in for loop >>>>>>>>");
+                System.out.println(search.getStartort()+ "..."+ search.getZielort() + "////////////");
             }
 
         } catch (SQLException e) {

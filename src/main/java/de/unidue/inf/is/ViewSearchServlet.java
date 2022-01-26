@@ -67,24 +67,24 @@ public class ViewSearchServlet extends HttpServlet {
             } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
-        } else
+        } else {
             listOfSearchDrives = store.getSearchDrives(search);
 
-        while (listOfSearchDrives.size() == 0) {
-            try {
-                store.complete();
-                store.close();
-                MessageServlet messageServlet = new MessageServlet("Es gibt keine Ergebnisse! versuch noch mal!", "keinen Ergebnissen", false);
-                messageServlet.doGet(req, resp);
-            } catch (ServletException | IOException e) {
-                e.printStackTrace();
+            while (listOfSearchDrives.size() == 0) {
+                try {
+                    store.complete();
+                    store.close();
+                    MessageServlet messageServlet = new MessageServlet("Es gibt keine Ergebnisse! versuch noch mal!", "keinen Ergebnissen", false);
+                    messageServlet.doGet(req, resp);
+                } catch (ServletException | IOException e) {
+                    e.printStackTrace();
+                }
             }
+            // System.out.println(listOfSearchDrives.get(0).getStartort());
+
+            store.complete();
+            store.close();
         }
-       // System.out.println(listOfSearchDrives.get(0).getStartort());
-
-        store.complete();
-        store.close();
-
         doGet(req, resp);
     }
 }
