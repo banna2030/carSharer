@@ -2,15 +2,12 @@
 <div class="card rounded shadow-sm">
     <div class="card-body">
         <h2 class="text mb-3">Fahrt Bewertung</h2>
-        <!-- Form is used for items that will take input from the user -->
-        <form action="new_rating" method="get" id="form">
+        <form method="post" id="form">
             <!-- text review area -->
             <div class="form-group row mb-5">
                 <label for="review" class="col-sm-3 col-form-label">Bewertung:</label>
-
                 <textarea class="col-sm-9" id="review" name="review" rows="7"
                           placeholder="Leave your comment here"></textarea>
-
             </div>
             <!-- nummerical rating area -->
             <div class="form-group row mb-5">
@@ -45,30 +42,14 @@
                 </div>
             </div>
             <!-- submit button-->
-            <input type="submit"
+
+            <button type="submit"
                    class="btn btn-primary d-block mb-2 float-end alert"
                    value="Bewerten"
-                   onclick="submitButton()"
+                   onclick="window.location='/view_drive?FID=${fid}'"
             />
-
+            bewerten</button>
         </form>
     </div>
 </div>
-<
-<script type="text/javascript">
-    function submitButton() {
-        var notValid =
-            !document.getElementById("rd1").checked
-            && !document.getElementById("rd2").checked
-            && !document.getElementById("rd3").checked
-            && !document.getElementById("rd4").checked
-            && !document.getElementById("rd5").checked
-            || document.getElementById("review").value == "";
-        if (notValid)
-            alert("Bitte Bewertung und Rating Eingeben!");
-        else {
-            document.getElementById("form").method = "post";
-        }
-    }
-</script>
 <#include "footer.ftl">

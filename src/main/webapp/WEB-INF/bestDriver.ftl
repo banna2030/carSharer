@@ -10,8 +10,8 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm d-flex">
-                            <label class="mx-2 mb-0" for="rider_name"><b>Fahrer: </b></label>
-                            <p id="rider_name" class="mb-0"> ${driverName}</p>
+                            <label class="mx-2 mb-0" for="rider_email"><b>Fahrer: </b></label>
+                            <p id="rider_email" class="mb-0"> ${driverEmail}</p>
                         </div>
                         <div class="col-sm d-flex">
                             <label for="average_rating" class="mx-2 mb-0"><b>Durchschnittsrating:</b></label>

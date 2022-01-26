@@ -29,6 +29,7 @@ public class ViewDriveServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("pagetitle", "-Fahrt Details");
         ArrayList<Drive> updatedDrive = new ArrayList<>();
         ArrayList<Rating> ratings;
         DriveStore driveStore = new DriveStore();
@@ -68,20 +69,28 @@ public class ViewDriveServlet extends HttpServlet {
 
         if (queryString.substring(queryString.lastIndexOf("=") + 1).equals("delete")) {
             if(driveStore.getDriveInformation(drive).getBID() != user.getBID()){
+                ratingStore.close();
+                ratingStore.complete();
+                driveStore.close();
+                driveStore.complete();
                 MessageServlet messageServlet = new MessageServlet("Nur der Reiseanbieter kann sie löschen", "Fahler", false);
                 messageServlet.doGet(req, resp);
             }
             if (driveStore.deleteDrive(user, drive)) {
-                driveStore.complete();
+                ratingStore.close();
+                ratingStore.complete();
                 driveStore.close();
+                driveStore.complete();
                 MessageServlet messageServlet = new MessageServlet("Die Reise ist erfolgreich gelöscht worden!", "Erfolgreich gelöscht", true);
                 messageServlet.doGet(req, resp);
             } else {
+                ratingStore.close();
+                ratingStore.complete();
+                driveStore.close();
+                driveStore.complete();
                 MessageServlet messageServlet = new MessageServlet("Ungebuchte Reise kann nicht gelöscht werden!", "Fehler", false);
                 messageServlet.doGet(req, resp);
             }
-            ratingStore.complete();
-            ratingStore.close();
             doGet(req, resp);
 
         } else if (queryString.substring(queryString.lastIndexOf("=") + 1).equals("book")) {
@@ -90,30 +99,45 @@ public class ViewDriveServlet extends HttpServlet {
             drive = driveStore.getDriveInformation(drive);
 
             if (drive.getFreiplätze() < user.getAnplätze()) {
+                ratingStore.close();
+                ratingStore.complete();
+                driveStore.close();
+                driveStore.complete();
                 MessageServlet messageServlet = new MessageServlet("Es gibt nicht genügend Plätze zu buchen!", "Fehler", false);
                 messageServlet.doGet(req, resp);
 
             }else if(currentDateTime.after(drive.getFahrtdatumzeit())){
+                ratingStore.close();
+                ratingStore.complete();
+                driveStore.close();
+                driveStore.complete();
                 MessageServlet messageServlet = new MessageServlet("Die Reise ist schon vorbei", "Fehler", false);
                 messageServlet.doGet(req, resp);
             }
             else {
                 if (ratingStore.bookDrive(user, drive)) {
-
+                    ratingStore.close();
+                    ratingStore.complete();
+                    driveStore.close();
+                    driveStore.complete();
                     MessageServlet messageServlet = new MessageServlet("Die Reise ist erfolgreich gebucht worden!", "Erfolgreich gebucht", true);
                     messageServlet.doGet(req, resp);
 
                 } else {
-
+                    ratingStore.close();
+                    ratingStore.complete();
+                    driveStore.close();
+                    driveStore.complete();
                     MessageServlet messageServlet = new MessageServlet("Die Reise ist bereit gebucht!", "Fehler", false);
                     messageServlet.doGet(req, resp);
 
                 }
             }
-
-            ratingStore.complete();
-            ratingStore.close();
             doGet(req, resp);
         }
+        ratingStore.close();
+        ratingStore.complete();
+        driveStore.close();
+        driveStore.complete();
     }
 }

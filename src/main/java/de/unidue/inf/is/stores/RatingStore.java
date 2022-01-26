@@ -22,7 +22,6 @@ public class RatingStore implements Closeable {
     //connection variables and functions
     private Connection connection;
     private boolean complete;
-
     public RatingStore() throws StoreException {
         try {
             connection = DBUtil.getExternalConnection();
@@ -31,11 +30,9 @@ public class RatingStore implements Closeable {
             throw new StoreException(e);
         }
     }
-
     public void complete() {
         complete = true;
     }
-
     @Override
     public void close() throws IOException {
         if (connection != null) {
@@ -65,7 +62,7 @@ public class RatingStore implements Closeable {
      * @returns true if adding and linking is successful, false otherwise
      * @autor Osama Elsafty
      */
-    public boolean sendReview(int bid, int fid, String review, int rating, String dateAndTime) throws RuntimeException {
+    public boolean sendReview(int bid, int fid, Rating rating) throws RuntimeException {
         final String sqlGetBEID = "SELECT beid FROM dbp105.bewertung " +
                 "WHERE textnachricht LIKE ? AND erstellungsdatum=? AND rating=?";
         // like is used for CLOB attributes
@@ -76,53 +73,46 @@ public class RatingStore implements Closeable {
                 "(?,?,?)";
         final String sqlDeleteFromBewertung = "DELETE FROM dbp105.bewertung WHERE beid=?";
 
-        int beid = -1;
         try {
             PreparedStatement ps = connection.prepareStatement(SqlInsertToBewertung);
             //setting place holders
-            ps.setString(1, review);
-            ps.setString(2, dateAndTime);
-            ps.setInt(3, rating);
+            ps.setString(1, rating.getTextnachricht());
+            ps.setString(2, rating.getErstellungsdatum());
+            ps.setInt(3, rating.getRating());
             ps.executeUpdate();
-            System.out.println("inserted to bewertung");
-
+//            System.out.println("inserted to bewertung");
             //linking to the user and the drive
             //getting the id of the the newly added review
             PreparedStatement ps2 = connection.prepareStatement(sqlGetBEID);
-            ps2.setString(1, review);
-            ps2.setString(2, dateAndTime);
-            ps2.setInt(3, rating);
+            ps2.setString(1, rating.getTextnachricht());
+            ps2.setString(2, rating.getErstellungsdatum());
+            ps2.setInt(3, rating.getRating());
             ResultSet rs2 = ps2.executeQuery();
-
             if (rs2.next()) {
-                beid = rs2.getInt("beid");
+                rating.setBEID(rs2.getInt("beid"));
             }
-
-            System.out.println("got the value of beid: " + beid);
-
+//            System.out.println("got the value of beid: " + rating.getBEID());
             //saving to table "schreiben"
             PreparedStatement ps3 = connection.prepareStatement(SqlInsertToSchreiben);
             ps3.setInt(1, bid);
             ps3.setInt(2, fid);
-            ps3.setInt(3, beid);
-            System.out.println("BID: " + bid + "\nfid" + fid + "\nbeid" + beid);
+            ps3.setInt(3, rating.getBEID());
+//            System.out.println("BID: " + bid + "\nfid" + fid + "\nbeid" + rating.getBEID());
             ps3.executeUpdate();
-            System.out.println("inserted to schreiben");
+//            System.out.println("inserted to schreiben");
             return true;
-
         } catch (SQLException e) {
             //exception happens when user tries to add 2nd review for the same drive
             //the exception happens when we link the (Already made) "Bewertung" into schreiben
             // deleting the made row in table bewertung if it can't be linked
             try {
                 PreparedStatement ps = connection.prepareStatement(sqlDeleteFromBewertung);
-                ps.setInt(1, beid);
+                ps.setInt(1, rating.getBEID());
                 ps.executeUpdate();
-                System.out.println("Bewertung deleted");
+                //System.out.println("Bewertung deleted");
             } catch (SQLException throwables) {
-                System.out.println("couldn't be deleted");
+                //System.out.println("couldn't be deleted");
             }
-
             return false;
         }
     }

@@ -18,6 +18,8 @@ public class BestDriverServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("pagetitle", "- Bester Fahrer");
+
         UserStore userStore = new UserStore();
         User bestDriver = userStore.getBestDriver();
 //        System.out.println("best driver id: " + bestDriver.getBID());
@@ -26,7 +28,7 @@ public class BestDriverServlet extends HttpServlet {
         userStore.complete();
         userStore.close();
         //setting best driver data
-        req.setAttribute("driverName", bestDriver.getName());
+        req.setAttribute("driverEmail", bestDriver.getEmail());
         req.setAttribute("averageRating", String.format("%.2f", averageRating));
 
         //setting his open drives

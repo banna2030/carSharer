@@ -23,7 +23,7 @@ public class ViewSearchServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        req.setAttribute("pagetitle", "-Fahrt suchen");
         req.setAttribute("searchDrive", listOfSearchDrives);
         req.getRequestDispatcher("viewSearch.ftl").forward(req, resp);
         listOfSearchDrives.clear();
@@ -60,26 +60,27 @@ public class ViewSearchServlet extends HttpServlet {
 
         if (from == "" || to == "") {
             try {
+                store.complete();
+                store.close();
                 MessageServlet messageServlet = new MessageServlet("Bitte Start- oder Zielort eingeben!", "Leer Textuelle", false);
                 messageServlet.doGet(req, resp);
             } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
         } else
-
             listOfSearchDrives = store.getSearchDrives(search);
-
 
         while (listOfSearchDrives.size() == 0) {
             try {
+                store.complete();
+                store.close();
                 MessageServlet messageServlet = new MessageServlet("Es gibt keine Ergebnisse! versuch noch mal!", "keinen Ergebnissen", false);
                 messageServlet.doGet(req, resp);
             } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println(listOfSearchDrives.get(0).getStartort());
-
+       // System.out.println(listOfSearchDrives.get(0).getStartort());
 
         store.complete();
         store.close();
