@@ -40,6 +40,7 @@ public class NewRatingServlet extends HttpServlet {
             state = ratingStore.sendReview(user.getBID(), fid, rating);
             if (state == false) {
 //                System.out.println("didn't pass double rating check... directing to error page");
+                ratingStore.close();
                 MessageServlet messageServlet = new MessageServlet("Sie dürfen dieselbe Fahrt nicht zwei Mal bewerten", "zweite Bewertung", false);
                 messageServlet.doGet(req, resp);
             }else {
@@ -51,7 +52,6 @@ public class NewRatingServlet extends HttpServlet {
         }
         else{
 //            System.out.println("didn't pass empty check... directing to error page");
-            ratingStore.complete();
             ratingStore.close();
             MessageServlet messageServlet = new MessageServlet("Eingaben dürfen nicht leer sein", "leere Eingaben", false);
             messageServlet.doGet(req, resp);

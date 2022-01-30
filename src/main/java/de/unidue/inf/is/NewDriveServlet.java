@@ -63,9 +63,8 @@ public class NewDriveServlet extends HttpServlet {
             MessageServlet messageServlet = new MessageServlet("Fahrt erfolgreich erstellt!", "Erfolgreich erstellten", true);
             messageServlet.doGet(req, resp);
         } else {
-            store.complete();
             store.close();
-            MessageServlet messageServlet = new MessageServlet("Sie dürfen keine Fahrt erstellen ohne Erlaubnis zu haben/ falsch Datum", "keine Erlaubnis", false);
+            MessageServlet messageServlet = new MessageServlet("Sie dürfen keine Fahrt erstellen ohne Erlaubnis zu haben / falsch Datum", "keine Erlaubnis", false);
             messageServlet.doGet(req, resp);
         }
         store.complete();

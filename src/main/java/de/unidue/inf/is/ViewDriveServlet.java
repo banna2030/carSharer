@@ -36,7 +36,8 @@ public class ViewDriveServlet extends HttpServlet {
         RatingStore ratingStore = new RatingStore();
         Drive drive = new Drive();
 
-        drive.setFID(Integer.parseInt(req.getParameter("FID")));
+        //drive.setFID(Integer.parseInt(req.getParameter("FID")));
+        drive.setFID(Integer.parseInt(req.getParameter("FID").replaceAll("\\D+", "")));
         updatedDrive.add(driveStore.getDriveInformation(drive));
         ratings = ratingStore.getDriveRatings(drive);
         Float avgRating = ratingStore.getAverageRating(drive);
@@ -69,9 +70,7 @@ public class ViewDriveServlet extends HttpServlet {
 
         if (queryString.substring(queryString.lastIndexOf("=") + 1).equals("delete")) {
             if(driveStore.getDriveInformation(drive).getBID() != user.getBID()){
-                ratingStore.complete();
                 ratingStore.close();
-                driveStore.complete();
                 driveStore.close();
                 MessageServlet messageServlet = new MessageServlet("Nur der Reiseanbieter kann sie löschen", "Fahler", false);
                 messageServlet.doGet(req, resp);
@@ -84,9 +83,7 @@ public class ViewDriveServlet extends HttpServlet {
                 MessageServlet messageServlet = new MessageServlet("Die Reise ist erfolgreich gelöscht worden!", "Erfolgreich gelöscht", true);
                 messageServlet.doGet(req, resp);
             } else {
-                ratingStore.complete();
                 ratingStore.close();
-                driveStore.complete();
                 driveStore.close();
                 MessageServlet messageServlet = new MessageServlet("Ungebuchte Reise kann nicht gelöscht werden!", "Fehler", false);
                 messageServlet.doGet(req, resp);
@@ -99,17 +96,13 @@ public class ViewDriveServlet extends HttpServlet {
             drive = driveStore.getDriveInformation(drive);
 
             if (drive.getFreiplätze() < user.getAnplätze()) {
-                ratingStore.complete();
                 ratingStore.close();
-                driveStore.complete();
                 driveStore.close();
                 MessageServlet messageServlet = new MessageServlet("Es gibt nicht genügend Plätze zu buchen!", "Fehler", false);
                 messageServlet.doGet(req, resp);
 
             }else if(currentDateTime.after(drive.getFahrtdatumzeit())){
-                ratingStore.complete();
                 ratingStore.close();
-                driveStore.complete();
                 driveStore.close();
                 MessageServlet messageServlet = new MessageServlet("Die Reise ist schon vorbei", "Fehler", false);
                 messageServlet.doGet(req, resp);
@@ -124,9 +117,7 @@ public class ViewDriveServlet extends HttpServlet {
                     messageServlet.doGet(req, resp);
 
                 } else {
-                    ratingStore.complete();
                     ratingStore.close();
-                    driveStore.complete();
                     driveStore.close();
                     MessageServlet messageServlet = new MessageServlet("Die Reise ist bereit gebucht!", "Fehler", false);
                     messageServlet.doGet(req, resp);
@@ -135,9 +126,7 @@ public class ViewDriveServlet extends HttpServlet {
             }
             doGet(req, resp);
         }
-        ratingStore.complete();
         ratingStore.close();
-        driveStore.complete();
         driveStore.close();
     }
 }
