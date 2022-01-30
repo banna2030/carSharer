@@ -157,6 +157,7 @@ public class RatingStore implements Closeable {
             ps.setInt(2, drive.getFID());
             ps.setInt(3, user.getAnplätze());
             ps.executeUpdate();
+            System.out.println("I resrved the trip");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;

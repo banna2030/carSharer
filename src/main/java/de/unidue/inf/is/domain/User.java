@@ -13,7 +13,7 @@ public final class User {
 
 
     public User() {
-        this.BID = 2;
+        this.BID = 3;
     }
 
     public int getAnplätze() {
