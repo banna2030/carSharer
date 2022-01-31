@@ -57,16 +57,16 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
+            <th scope="col">Benutzer Email:</th>
             <th scope="col">Textnachricht:</th>
-            <th scope="col">Erstellungsdatum:</th>
             <th scope="col">Rating:</th>
         </tr>
         </thead>
         <tbody>
         <#list driveRating as dr>
             <tr>
+                <td>${dr.getUserEmail()}</td>
                 <td>${dr.getTextnachricht()}</td>
-                <td>${dr.getErstellungsdatum()}</td>
                 <td>${dr.getRating()}</td>
             </tr>
         </#list>

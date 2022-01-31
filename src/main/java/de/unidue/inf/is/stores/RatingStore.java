@@ -126,7 +126,7 @@ public class RatingStore implements Closeable {
     public ArrayList<Rating> getDriveRatings(Drive drive) throws StoreException {
         ArrayList<Rating> result = new ArrayList<>();
         try {
-            PreparedStatement ps = connection.prepareStatement("select f.fid, s.fahrt, bw.beid, s.bewertung, s.benutzer, bw.textnachricht, bw.erstellungsdatum, bw.rating from dbp105.bewertung bw INNER JOIN dbp105.schreiben s ON bw.beid = s.bewertung INNER join dbp105.fahrt f ON s.fahrt = f.fid WHERE f.fid = ?");
+            PreparedStatement ps = connection.prepareStatement("select f.fid, s.fahrt, bw.beid, s.bewertung, s.benutzer, bw.textnachricht, bw.erstellungsdatum, bw.rating, benutzer.email from dbp105.bewertung bw INNER JOIN dbp105.schreiben s ON bw.beid = s.bewertung INNER join dbp105.fahrt f ON s.fahrt = f.fid INNER JOIN dbp105.benutzer benutzer ON benutzer.bid = s.benutzer WHERE f.fid = ?");
             ps.setInt(1, drive.getFID());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -135,6 +135,7 @@ public class RatingStore implements Closeable {
                 rating.setErstellungsdatum(rs.getString("erstellungsdatum"));
                 rating.setRating(rs.getInt("rating"));
                 rating.setBEID(rs.getInt("beid"));
+                rating.setUserEmail(rs.getString("email"));
                 result.add(rating);
             }
         } catch (SQLException e) {

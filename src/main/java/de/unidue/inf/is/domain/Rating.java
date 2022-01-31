@@ -10,6 +10,15 @@ public class Rating {
     private int Rating;
     private String textnachricht;
     private String erstellungsdatum;
+    private String userEmail;
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
 
     public int getFID() {
         return FID;
