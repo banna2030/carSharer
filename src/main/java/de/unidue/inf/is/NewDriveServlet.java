@@ -26,13 +26,15 @@ public class NewDriveServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String from = req.getParameter("from");
         String to = req.getParameter("to");
-        int capacity = Integer.parseInt(req.getParameter("capacity"));
-        float cost = Float.parseFloat(req.getParameter("cost"));
+
         int transportmittel = Integer.parseInt(req.getParameter("Transportmittel"));
         String fahrtdatum = req.getParameter("Fahrtdatum");
-
         String description = req.getParameter("description");
+        DriveStore store = new DriveStore();
 
+        if (from != "" && to != "" && req.getParameter("capacity") != "" && req.getParameter("cost") != "") {
+            int capacity = Integer.parseInt(req.getParameter("capacity"));
+            float cost = Float.parseFloat(req.getParameter("cost"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm"),
                 sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -55,7 +57,7 @@ public class NewDriveServlet extends HttpServlet {
         newDrive.setFahrtdatumzeit(dateTime);
         newDrive.setBeschreibung(description);
 
-        DriveStore store = new DriveStore();
+
         if (store.checkForLicense(newDrive) && store.checkForDate(newDrive)) {
             store.storeNewDrive(newDrive);
             store.complete();
@@ -67,8 +69,15 @@ public class NewDriveServlet extends HttpServlet {
             MessageServlet messageServlet = new MessageServlet("Sie dürfen keine Fahrt erstellen ohne Erlaubnis zu haben / falsch Datum", "keine Erlaubnis", false);
             messageServlet.doGet(req, resp);
         }
+        } else {
+            store.close();
+            MessageServlet messageServlet = new MessageServlet("Leere Eingaben", "keine eingaben", false);
+            messageServlet.doGet(req, resp);
+
+        }
         store.complete();
         store.close();
+
         doGet(req, resp);
     }
 }
